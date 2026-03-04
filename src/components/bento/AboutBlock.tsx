@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import { ImageWithFallback } from "../figma/ImageWithFallback";
+import portraitImg from "../../assets/about-portrait.jpg";
 
 export function AboutBlock() {
   return (
@@ -10,11 +10,7 @@ export function AboutBlock() {
       <div className="relative h-full flex flex-col gap-4">
         {/* Portrait */}
         <div className="w-24 h-24 rounded-2xl overflow-hidden ring-4 ring-white/60 shadow-xl">
-          <ImageWithFallback
-            src="https://images.unsplash.com/photo-1761522002071-67755dc6c820?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBkZXNpZ25lciUyMHBvcnRyYWl0fGVufDF8fHx8MTc2MzczNDgxNHww&ixlib=rb-4.1.0&q=80&w=1080"
-            alt="About Dan"
-            className="w-full h-full object-cover"
-          />
+          <img src={portraitImg} alt="About Dan" className="w-full h-full object-cover" />
         </div>
 
         {/* Content */}

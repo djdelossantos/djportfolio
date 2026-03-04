@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { ImageWithFallback } from "../figma/ImageWithFallback";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface CaseStudyCarouselProps {
@@ -39,7 +38,7 @@ export function CaseStudyCarousel({ images, alt }: CaseStudyCarouselProps) {
               index === currentIndex ? "opacity-100" : "opacity-0"
             }`}
           >
-            <ImageWithFallback
+            <img
               src={image}
               alt={`${alt} - Screen ${index + 1}`}
               className="w-full h-full object-cover"

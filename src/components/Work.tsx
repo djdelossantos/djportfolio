@@ -1,8 +1,19 @@
 import { motion } from "motion/react";
 import { ArrowRight, Search, Lightbulb, TestTube, Rocket, Users, Clock, Target, ZoomIn, ZoomOut, X } from "lucide-react";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "./ui/dialog";
+import dashboardImg from "../assets/dashboard.png";
+import walletImg from "../assets/wallet.png";
+import icoSetupImg from "../assets/ico-setup.png";
+import sendTokensImg from "../assets/send-tokens.png";
+import ccxLogo from "../assets/ccx-logo.webp";
+import processFlowImg from "../assets/process-flow.png";
+import c2cStyleguideImg from "../assets/c2c-styleguide.png";
+import solution1Img from "../assets/solution-1.png";
+import solution2Img from "../assets/solution-2.png";
+import solution3Img from "../assets/solution-3.png";
+import solution4Img from "../assets/solution-4.png";
+import dribbbleUploadImg from "../assets/dribbble-upload.png";
 
 interface ProjectContext {
   company: string;
@@ -107,12 +118,7 @@ const caseStudies: CaseStudy[] = [
     processImages: [],
     keyInsight: "Product readiness does not equal market readiness. In financial infrastructure products, trust-building and market education are as important as usability. A product can be technically ready and beautifully structured, yet still struggle without ecosystem trust, regulatory confidence, and public understanding. Infrastructure products must align with market maturity; not just feature completeness.",
     solution: "I designed CapchainX as a compliance-first ICO platform that prioritized clarity, transparency, and trust over speed and hype. The platform guided companies through structured ICO setup with educational guardrails, required legal documentation review, and provided real-time fundraising transparency. Every design decision emphasized legitimacy: KYC requirements, plain-language explanations, contextual education, and avoiding speculative messaging. The result was a product that successfully launched and was operationally ready; but taught me that infrastructure adoption requires ecosystem-level trust beyond interface clarity.",
-    solutionImages: [
-      "https://i.ibb.co/LX4vhL7s/Dashboard.png",
-      "https://i.ibb.co/nN050hD9/Wallet.png",
-      "https://i.ibb.co/Gj4gHLY/ICO-Setup.png",
-      "https://i.ibb.co/qFPvT407/Send-Tokens.png"
-    ],
+    solutionImages: [dashboardImg, walletImg, icoSetupImg, sendTokensImg],
     outcomes: [
       {
         metric: "Successfully launched publicly",
@@ -138,7 +144,7 @@ const caseStudies: CaseStudy[] = [
       "As a senior designer, I learned that financial infrastructure requires ecosystem alignment beyond UI/UX excellence; market maturity, regulatory confidence, and anchor success stories are as critical as usability",
       "This project taught me the difference between solving operational problems (launching an ICO) and solving psychological problems (trusting tokenized equity); that distinction reshaped how I think about product-market fit"
     ],
-    heroImage: "https://i.ibb.co/PGNcLLT4/ccx-logo.webp",
+    heroImage: ccxLogo,
     gradient: "from-violet-500/20 to-fuchsia-500/20"
   },
   {
@@ -204,24 +210,19 @@ const caseStudies: CaseStudy[] = [
     ],
     processImages: [
       {
-        url: "https://i.ibb.co/d4b4QGMy/Screenshot-2026-01-23-at-10-17-54-PM.png",
+        url: processFlowImg,
         caption: "Initial process flow chart mapping user journeys, verification requirements, and trust mechanisms",
         phase: "Process Flow"
       },
       {
-        url: "https://i.ibb.co/NdhN7vq4/c2c-styleguide.png",
+        url: c2cStyleguideImg,
         caption: "Design system and component library built for Free MusicTribe; ensuring consistency and scalability across all marketplace features",
         phase: "Design System"
       }
     ],
     keyInsight: "Trust is more important than speed. A marketplace can launch quickly, but without trust, it cannot sustain participation. Designing a marketplace is ultimately about building trust, not just product showcases.",
     solution: "I designed Free MusicTribe with trust embedded at every layer: multi-step identity verification for users and mandatory Shop accounts for sellers, in-platform messaging for auditability, transparent seller ratings and history, and intentional friction that encouraged buyer-seller confidence-building before transactions. Rather than optimizing for instant checkout, the platform emulated face-to-face transactions in a digital environment—prioritizing trust over speed.",
-    solutionImages: [
-      "https://i.ibb.co/s9C73w0K/Screenshot-2026-01-23-at-10-41-20-PM.png",
-      "https://i.ibb.co/cKWG6vLL/Screenshot-2026-01-23-at-10-44-10-PM.png",
-      "https://i.ibb.co/prbXBW1S/Screenshot-2026-01-23-at-10-46-37-PM.png",
-      "https://i.ibb.co/PZy6C5Gq/Screenshot-2026-01-23-at-10-49-24-PM.png"
-    ],
+    solutionImages: [solution1Img, solution2Img, solution3Img, solution4Img],
     outcomes: [
       {
         metric: "Successfully launched to production",
@@ -246,7 +247,7 @@ const caseStudies: CaseStudy[] = [
       "As a senior designer, I would have more strongly advocated for a built-in or third-party payment system and dedicated administrators/moderators as core infrastructure, not optional enhancements",
       "The lack of user support infrastructure significantly impacted adoption; without dedicated support personnel, users had limited assistance at critical moments that influence trust and engagement"
     ],
-    heroImage: "https://cdn.dribbble.com/userupload/24509585/file/original-6448bf00ef091adcb52db5907e2d2336.png?resize=3200x2400&vertical=center",
+    heroImage: dribbbleUploadImg,
     gradient: "from-violet-500/20 to-fuchsia-500/20"
   }
 ];
@@ -281,7 +282,7 @@ function CaseStudyDetail({ study, index }: { study: CaseStudy; index: number }) 
         <div className="relative rounded-3xl overflow-hidden bg-neutral-900/50 backdrop-blur-sm border border-white/10">
           {/* Header Image */}
           <div className="relative h-64 sm:h-80 lg:h-96 overflow-hidden">
-            <ImageWithFallback
+            <img
               src={study.heroImage}
               alt={study.title}
               className="w-full h-full object-cover object-[center_75%] scale-150"
@@ -397,7 +398,7 @@ function CaseStudyDetail({ study, index }: { study: CaseStudy; index: number }) 
                   {study.processImages.map((img, i) => (
                     <div key={i} className="group/img">
                       <div className="relative rounded-xl overflow-hidden mb-2 sm:mb-3 bg-neutral-900">
-                        <ImageWithFallback
+                        <img
                           src={img.url}
                           alt={img.caption}
                           className="w-full aspect-video object-cover transition-transform duration-300 group-hover/img:scale-105"
@@ -451,7 +452,7 @@ function CaseStudyDetail({ study, index }: { study: CaseStudy; index: number }) 
                         className="group/solution rounded-lg sm:rounded-xl overflow-hidden bg-neutral-900 cursor-pointer hover:ring-2 hover:ring-violet-400/50 transition-all"
                         onClick={() => setZoomedImage(img)}
                       >
-                        <ImageWithFallback
+                        <img
                           src={img}
                           alt={`Solution screenshot ${i + 1}`}
                           className="w-full aspect-video object-cover group-hover/solution:scale-105 transition-transform duration-300"

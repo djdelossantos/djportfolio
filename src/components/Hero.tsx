@@ -1,7 +1,7 @@
 import { motion, useMotionValue, useSpring } from "motion/react";
 import { ArrowDown } from "lucide-react";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useRef, useEffect } from "react";
+import heroPortrait from "../assets/hero-portrait.png";
 
 export function Hero() {
   const photoRef = useRef<HTMLDivElement>(null);
@@ -61,11 +61,7 @@ export function Hero() {
             
             {/* Photo container */}
             <div className="relative w-32 h-32 lg:w-40 lg:h-40 rounded-full overflow-hidden border-4 border-neutral-950 bg-neutral-900 group-hover:scale-105 transition-transform duration-500">
-              <ImageWithFallback
-                src="https://i.ibb.co/3mNyKqC6/DJ-2x2.png"
-                alt="Dan Joseph Delos Santos"
-                className="w-full h-full object-cover"
-              />
+              <img src={heroPortrait} alt="Dan Joseph Delos Santos" className="w-full h-full object-cover" />
               
               {/* Overlay gradient on hover */}
               <div className="absolute inset-0 bg-gradient-to-t from-violet-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -91,11 +87,7 @@ export function Hero() {
             
             {/* Photo container */}
             <div className="relative w-28 h-28 rounded-full overflow-hidden border-4 border-neutral-950 bg-neutral-900">
-              <ImageWithFallback
-                src="https://i.ibb.co/3mNyKqC6/DJ-2x2.png"
-                alt="Dan Joseph Delos Santos"
-                className="w-full h-full object-cover"
-              />
+              <img src={heroPortrait} alt="Dan Joseph Delos Santos" className="w-full h-full object-cover" />
             </div>
             
             {/* Floating badge */}
