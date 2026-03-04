@@ -3,8 +3,10 @@
   import react from '@vitejs/plugin-react-swc';
   import path from 'path';
 
-  export default defineConfig({
-    plugins: [react()],
+export default defineConfig({
+  // GitHub Pages needs assets to resolve under the repo subpath
+  base: '/djportfolio/',
+  plugins: [react()],
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
