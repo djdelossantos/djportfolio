@@ -142,7 +142,7 @@ export function Hero() {
             className="max-w-3xl mx-auto space-y-4"
           >
             <p className="text-2xl lg:text-3xl text-neutral-300 font-light">
-              Product Designer / Senior UIUX Designer
+              Senior Product Designer (UX/UI)
             </p>
             <p className="text-lg lg:text-xl text-neutral-400 max-w-2xl mx-auto">
               I design systems that reduce uncertainty and build confidence.

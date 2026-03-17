@@ -1,7 +1,7 @@
 
-  # UX/UI Designer Portfolio Homepage
+  # UX_UI Designer Portfolio Homepage
 
-  This is a code bundle for UX/UI Designer Portfolio Homepage. The original project is available at https://www.figma.com/design/AM203pIPxZW3RTbc9KmdUy/UX-UI-Designer-Portfolio-Homepage.
+  This is a code bundle for UX_UI Designer Portfolio Homepage. The original project is available at https://www.figma.com/design/DrxC66rbB82a0h3xvRNjJi/UX_UI-Designer-Portfolio-Homepage.
 
   ## Running the code
 

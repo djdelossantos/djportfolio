@@ -2,11 +2,12 @@ import { motion } from "motion/react";
 import { ArrowRight, Search, Lightbulb, TestTube, Rocket, Users, Clock, Target, ZoomIn, ZoomOut, X } from "lucide-react";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "./ui/dialog";
+import { ImageWithFallback } from "./ImageWithFallback";
 import dashboardImg from "../assets/dashboard.png";
 import walletImg from "../assets/wallet.png";
 import icoSetupImg from "../assets/ico-setup.png";
 import sendTokensImg from "../assets/send-tokens.png";
-import ccxLogo from "../assets/ccx-logo.webp";
+import ccxLogo from "../assets/ccx-logo.jpg";
 import processFlowImg from "../assets/process-flow.png";
 import c2cStyleguideImg from "../assets/c2c-styleguide.png";
 import solution1Img from "../assets/solution-1.png";
@@ -14,6 +15,11 @@ import solution2Img from "../assets/solution-2.png";
 import solution3Img from "../assets/solution-3.png";
 import solution4Img from "../assets/solution-4.png";
 import dribbbleUploadImg from "../assets/dribbble-upload.png";
+import invoisureDashboardImg from "../assets/invoisure-dashboard.jpg";
+import invoisureMerchantPortalImg from "../assets/invoisure-customer-management.png";
+import invoisureCustomerScreenImg from "../assets/invoisure-invoice.png";
+import invoisureEmailTemplateImg from "../assets/invoisure-email-template.png";
+import invoisureHeroImg from "../assets/invoisure-login-desktop.png";
 
 interface ProjectContext {
   company: string;
@@ -54,6 +60,104 @@ interface CaseStudy {
 }
 
 const caseStudies: CaseStudy[] = [
+  {
+    title: "Invoisure",
+    tagline: "Unifying Merchant Operations Through Intelligent Workflow Design",
+    context: {
+      company: "Invoisure (Cloud-based SaaS Platform)",
+      duration: "2 years",
+      team: "1 Product Designer (me), CEO, 2 frontend developers, 2 backend developers",
+      myRole: "End-to-end Product Designer, UX Strategy Lead, Design System Owner"
+    },
+    problem: "Merchants running expanding businesses dealt with operational fragmentation throughout their workflow. They used different tools for billing, payment collection, inventory management, and customer data, with each tool working separately. This separation led to operational challenges, such as creating invoices manually for both one-time and recurring payments, missed or delayed payment collection because of inadequate tracking, and extensive time spent consolidating data from various systems. Without a central view, merchants did not have real-time information about sales performance, inventory levels, and financial status. The outcome was inefficiency, mistakes, and restricted growth as their businesses expanded.",
+    challenge: "The main design challenge was combining complex, multi-layered merchant workflows, including billing, payments, inventory, customer management, and reporting, into a single unified system without losing flexibility or control. Merchants needed a platform that could manage various business models, such as one-time invoices, recurring billing, and product sales, while allowing for unique branding through white-labeling. I had to design for three distinct user groups at the same time: admins who manage system settings, merchants who operate daily tasks, and customers who receive invoices and make payments. The architecture needed to support customization while ensuring consistency, and the interface had to make intricate financial and operational data easy to use.",
+    approach: [
+      {
+        phase: "Discovery & Problem Definition",
+        description: "I began by mapping the fragmented merchant ecosystem to understand the root causes of operational inefficiency. The goal was to identify where manual processes, data silos, and tool-switching created the most friction.",
+        icon: Search,
+        details: [
+          "Conducted stakeholder interviews with CEO to understand business model and merchant pain points",
+          "Mapped existing merchant workflows across billing, inventory, payments, and customer management",
+          "Identified critical gaps: lack of centralized data, manual invoice generation, poor payment tracking visibility",
+          "Analyzed competing platforms to understand baseline expectations and differentiation opportunities",
+          "Defined three core user personas: System Admins, Merchants, and End Customers"
+        ]
+      },
+      {
+        phase: "Strategy & Information Architecture",
+        description: "I organized the platform based on role-based access and clear workflows. The design had to allow for admin-level system setup, merchant-level operational control, and easy use for customers, all within a white-labeled environment.",
+        icon: Lightbulb,
+        details: [
+          "Designed three-tier information architecture: Admin Panel, Merchant Portal, Customer-Facing Screens",
+          "Defined core workflows: invoice creation (one-time & recurring), payment collection, inventory tracking, reporting",
+          "Built notification strategy integrating email and SMS touchpoints for payment reminders and confirmations",
+          "Established white-labeling framework allowing brand customization without structural fragmentation",
+          "Prioritized features based on merchant operational frequency and impact on payment collection speed"
+        ]
+      },
+      {
+        phase: "Design System & Scalable Patterns",
+        description: "I created a comprehensive design system that balanced white-label flexibility with structural consistency. The system needed to support rapid development while ensuring usability across admin, merchant, and customer interfaces.",
+        icon: TestTube,
+        details: [
+          "Built modular component library supporting theme customization for white-labeling",
+          "Designed reusable UI patterns for recurring actions: invoice generation, payment processing, report viewing",
+          "Created responsive layouts optimized for desktop-heavy merchant workflows and mobile customer payments",
+          "Designed email and SMS notification templates maintaining merchant branding while ensuring clarity",
+          "Established accessibility and usability standards across all user-facing touchpoints"
+        ]
+      },
+      {
+        phase: "Solution Delivery & Collaboration",
+        description: "I delivered complete design specifications for all platform layers and collaborated closely with development teams to ensure implementation fidelity. I also designed marketing materials to support product launch and merchant onboarding.",
+        icon: Rocket,
+        details: [
+          "Delivered high-fidelity mockups and interactive prototypes for admin, merchant, and customer portals",
+          "Created detailed design specifications and developer handover documentation",
+          "Designed marketing website communicating platform value and differentiation",
+          "Collaborated with frontend and backend developers to resolve technical constraints without compromising UX",
+          "Iterated based on stakeholder feedback and early merchant testing"
+        ]
+      }
+    ],
+    processImages: [],
+    keyInsight: "Combining things without making changes makes processes run more smoothly, but it can also damage brand identity. The hardest part of designing a multi-tenant SaaS is creating a system that feels unique to each user, where merchants can see how their business operates without losing the brand experience that makes their customer relationships special.",
+    solution: "I designed Invoisure as a white-label financial platform that streamlines daily operations without stripping away a merchant's unique brand. To cut down on manual work and speed up payment collection, the core experience connects four key areas. The Merchant Dashboard gives users instant visibility into their day-to-day operational health, while the Customer Management directory makes it easy to track client details and billing history at a glance. I also designed flexible Payment & Invoicing workflows for one-time and recurring billing to remove friction and get merchants paid faster. Finally, highly customizable Email Templates ensure every automated notification feels true to the merchant's distinct brand instead of looking like a generic software receipt.",
+    solutionImages: [
+      invoisureDashboardImg,
+      invoisureMerchantPortalImg,
+      invoisureCustomerScreenImg,
+      invoisureEmailTemplateImg
+    ],
+    outcomes: [
+      {
+        metric: "Unified Platform Delivered",
+        description: "Successfully launched admin panel, merchant portal, and customer-facing payment screens with white-labeling support"
+      },
+      {
+        metric: "Operational Efficiency Improved",
+        description: "Consolidated fragmented workflows into single platform, eliminating tool-switching and manual data consolidation"
+      },
+      {
+        metric: "Real-Time Merchant Insights",
+        description: "Delivered centralized reporting and audit trails providing visibility into sales, payments, and inventory"
+      },
+      {
+        metric: "Faster Payment Collection",
+        description: "Improved communication through automated email/SMS notifications and streamlined customer payment flows"
+      }
+    ],
+    learnings: [
+      "Automate the switch: Data migration is a massive hurdle. I’d build smart tools to parse legacy data and eliminate hours of manual entry.",
+      "Make onboarding adapt: Generic tutorials get skipped. I’d design dynamic setup flows that give contextual help based on a merchant's specific business type.",
+      "Live prototyping saves dev time: Instead of waiting for the next sprint, I’d use rapid-prototyping tools to tweak complex workflows with users live during testing.",
+      "Scale branding, protect UX: White-labeling is a delicate balance. I’d use automated theming so merchants can apply their identity without breaking the core interface.",
+      "From static data to next steps: Clean dashboards are just the baseline. The real win is shifting from historical reports to proactive insights users can act on instantly."
+    ],
+    heroImage: invoisureHeroImg,
+    gradient: "from-violet-500/20 to-fuchsia-500/20"
+  },
   {
     title: "CapchainX",
     tagline: "Designing Infrastructure for Legally-Backed Tokenized Equity (ICO Platform)",
@@ -118,7 +222,12 @@ const caseStudies: CaseStudy[] = [
     processImages: [],
     keyInsight: "Product readiness does not equal market readiness. In financial infrastructure products, trust-building and market education are as important as usability. A product can be technically ready and beautifully structured, yet still struggle without ecosystem trust, regulatory confidence, and public understanding. Infrastructure products must align with market maturity; not just feature completeness.",
     solution: "I designed CapchainX as a compliance-first ICO platform that prioritized clarity, transparency, and trust over speed and hype. The platform guided companies through structured ICO setup with educational guardrails, required legal documentation review, and provided real-time fundraising transparency. Every design decision emphasized legitimacy: KYC requirements, plain-language explanations, contextual education, and avoiding speculative messaging. The result was a product that successfully launched and was operationally ready; but taught me that infrastructure adoption requires ecosystem-level trust beyond interface clarity.",
-    solutionImages: [dashboardImg, walletImg, icoSetupImg, sendTokensImg],
+    solutionImages: [
+      dashboardImg,
+      walletImg,
+      icoSetupImg,
+      sendTokensImg
+    ],
     outcomes: [
       {
         metric: "Successfully launched publicly",
@@ -222,7 +331,12 @@ const caseStudies: CaseStudy[] = [
     ],
     keyInsight: "Trust is more important than speed. A marketplace can launch quickly, but without trust, it cannot sustain participation. Designing a marketplace is ultimately about building trust, not just product showcases.",
     solution: "I designed Free MusicTribe with trust embedded at every layer: multi-step identity verification for users and mandatory Shop accounts for sellers, in-platform messaging for auditability, transparent seller ratings and history, and intentional friction that encouraged buyer-seller confidence-building before transactions. Rather than optimizing for instant checkout, the platform emulated face-to-face transactions in a digital environment—prioritizing trust over speed.",
-    solutionImages: [solution1Img, solution2Img, solution3Img, solution4Img],
+    solutionImages: [
+      solution1Img,
+      solution2Img,
+      solution3Img,
+      solution4Img
+    ],
     outcomes: [
       {
         metric: "Successfully launched to production",
@@ -282,13 +396,13 @@ function CaseStudyDetail({ study, index }: { study: CaseStudy; index: number }) 
         <div className="relative rounded-3xl overflow-hidden bg-neutral-900/50 backdrop-blur-sm border border-white/10">
           {/* Header Image */}
           <div className="relative h-64 sm:h-80 lg:h-96 overflow-hidden">
-            <img
+            <ImageWithFallback
               src={study.heroImage}
               alt={study.title}
-              className="w-full h-full object-cover object-[center_75%] scale-150"
+              className="w-full h-auto"
             />
             <div className={`absolute inset-0 bg-gradient-to-b ${study.gradient}`} />
-            <div className="absolute inset-0 bg-neutral-950/75" />
+            <div className="absolute inset-0 bg-neutral-950/90" />
             
             <div className="absolute inset-0 p-4 sm:p-6 lg:p-12 flex flex-col justify-end">
               <h3 className="text-[32px] sm:text-3xl lg:text-5xl text-white mb-2 sm:mb-3">{study.title}</h3>
@@ -398,7 +512,7 @@ function CaseStudyDetail({ study, index }: { study: CaseStudy; index: number }) 
                   {study.processImages.map((img, i) => (
                     <div key={i} className="group/img">
                       <div className="relative rounded-xl overflow-hidden mb-2 sm:mb-3 bg-neutral-900">
-                        <img
+                        <ImageWithFallback
                           src={img.url}
                           alt={img.caption}
                           className="w-full aspect-video object-cover transition-transform duration-300 group-hover/img:scale-105"
@@ -442,7 +556,7 @@ function CaseStudyDetail({ study, index }: { study: CaseStudy; index: number }) 
                   <div className="inline-flex items-center gap-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-green-500/10 border border-green-500/20 mb-3 sm:mb-4">
                     <span className="text-xs sm:text-sm text-green-400">The Solution</span>
                   </div>
-                  <p className="text-sm sm:text-base lg:text-lg text-neutral-300 leading-relaxed mb-6 sm:mb-8">{study.solution}</p>
+                  <p className="text-sm sm:text-base lg:text-lg text-neutral-300 leading-relaxed mb-6 sm:mb-8 whitespace-pre-line">{study.solution}</p>
                   
                   {/* Solution Images */}
                   <div className="grid grid-cols-2 gap-3 sm:gap-4">
@@ -452,7 +566,7 @@ function CaseStudyDetail({ study, index }: { study: CaseStudy; index: number }) 
                         className="group/solution rounded-lg sm:rounded-xl overflow-hidden bg-neutral-900 cursor-pointer hover:ring-2 hover:ring-violet-400/50 transition-all"
                         onClick={() => setZoomedImage(img)}
                       >
-                        <img
+                        <ImageWithFallback
                           src={img}
                           alt={`Solution screenshot ${i + 1}`}
                           className="w-full aspect-video object-cover group-hover/solution:scale-105 transition-transform duration-300"

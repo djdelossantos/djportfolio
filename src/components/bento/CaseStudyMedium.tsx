@@ -1,5 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { Badge } from "../ui/badge";
+import { ImageWithFallback } from "../ImageWithFallback";
 
 interface CaseStudyMediumProps {
   title: string;
@@ -17,7 +18,7 @@ export function CaseStudyMedium({ title, tags, color, imageUrl }: CaseStudyMediu
       <div className="relative h-full flex flex-col gap-4">
         {/* Image */}
         <div className="aspect-video rounded-2xl overflow-hidden bg-white/20 backdrop-blur-sm ring-1 ring-white/30 shadow-lg">
-          <img
+          <ImageWithFallback
             src={imageUrl}
             alt={title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"

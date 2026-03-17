@@ -1,5 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { Badge } from "./ui/badge";
+import { ImageWithFallback } from "./ImageWithFallback";
 
 interface ProjectCardProps {
   title: string;
@@ -12,7 +13,7 @@ export function ProjectCard({ title, description, tag, imageUrl }: ProjectCardPr
   return (
     <div className="group bg-white/60 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
       <div className="aspect-video overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-        <img
+        <ImageWithFallback
           src={imageUrl}
           alt={title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
