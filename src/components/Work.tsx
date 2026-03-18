@@ -7,7 +7,7 @@ import dashboardImg from "../assets/dashboard.png";
 import walletImg from "../assets/wallet.png";
 import icoSetupImg from "../assets/ico-setup.png";
 import sendTokensImg from "../assets/send-tokens.png";
-import ccxLogo from "../assets/ccx-logo.jpg";
+import ccxLogo from "../assets/CapchainX_hero.png";
 import processFlowImg from "../assets/process-flow.png";
 import c2cStyleguideImg from "../assets/c2c-styleguide.png";
 import solution1Img from "../assets/solution-1.png";
@@ -19,7 +19,7 @@ import invoisureDashboardImg from "../assets/invoisure-dashboard.jpg";
 import invoisureMerchantPortalImg from "../assets/invoisure-customer-management.png";
 import invoisureCustomerScreenImg from "../assets/invoisure-invoice.png";
 import invoisureEmailTemplateImg from "../assets/invoisure-email-template.png";
-import invoisureHeroImg from "../assets/invoisure-login-desktop.png";
+import invoisureHeroImg from "../assets/Invoisure_hero.png";
 
 interface ProjectContext {
   company: string;
@@ -402,7 +402,7 @@ function CaseStudyDetail({ study, index }: { study: CaseStudy; index: number }) 
               className="w-full h-auto"
             />
             <div className={`absolute inset-0 bg-gradient-to-b ${study.gradient}`} />
-            <div className="absolute inset-0 bg-neutral-950/90" />
+            <div className="absolute inset-0 bg-neutral-950/75" />
             
             <div className="absolute inset-0 p-4 sm:p-6 lg:p-12 flex flex-col justify-end">
               <h3 className="text-[32px] sm:text-3xl lg:text-5xl text-white mb-2 sm:mb-3">{study.title}</h3>

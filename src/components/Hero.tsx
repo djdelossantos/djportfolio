@@ -142,11 +142,11 @@ export function Hero() {
             className="max-w-3xl mx-auto space-y-4"
           >
             <p className="text-2xl lg:text-3xl text-neutral-300 font-light">
-              Senior Product Designer (UX/UI)
+              Senior Product Designer (UX/UI) | Fintech • SaaS • Digital Products | End-to-End Product Design
             </p>
-            <p className="text-lg lg:text-xl text-neutral-400 max-w-2xl mx-auto">
-              I design systems that reduce uncertainty and build confidence.
-              17 years turning complex challenges into clarity.
+            <p className="text-lg lg:text-xl text-neutral-400 max-w-4xl mx-auto">
+              With 10+ years of experience, I transform complex data and fragmented workflows into scalable, actionable interfaces.
+              I design systems that reduce user friction, protect engineering time, and drive business value.
             </p>
           </motion.div>
         </motion.div>
