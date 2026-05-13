@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
-import { ArrowRight, Search, Lightbulb, TestTube, Rocket, Users, Clock, Target, ZoomIn, ZoomOut, X } from "lucide-react";
-import { useState } from "react";
+import { ArrowRight, Search, Lightbulb, TestTube, Rocket, ZoomIn, ZoomOut } from "lucide-react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "./ui/dialog";
 import { ImageWithFallback } from "./ImageWithFallback";
 import dashboardImg from "../assets/dashboard.png";
@@ -58,6 +58,16 @@ interface CaseStudy {
   heroImage: string;
   gradient: string;
 }
+
+const caseStudySections = [
+  { id: "case-study-problem", label: "The Problem" },
+  { id: "case-study-challenge", label: "The Challenge" },
+  { id: "case-study-approach", label: "My Approach" },
+  { id: "case-study-insight", label: "Key Insight" },
+  { id: "case-study-solution", label: "The Solution" },
+  { id: "case-study-outcomes", label: "Impact & Outcomes" },
+  { id: "case-study-learnings", label: "What I Learned" },
+] as const;
 
 const caseStudies: CaseStudy[] = [
   {
@@ -365,307 +375,398 @@ const caseStudies: CaseStudy[] = [
     gradient: "from-violet-500/20 to-fuchsia-500/20"
   }
 ];
+function SectionLabel({ children }: { children: ReactNode }) {
+  return (
+    <div className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] uppercase tracking-[0.24em] text-neutral-400">
+      {children}
+    </div>
+  );
+}
 
-function CaseStudyDetail({ study, index }: { study: CaseStudy; index: number }) {
-  const [isExpanded, setIsExpanded] = useState(false);
+function CaseStudyCard({
+  study,
+  index,
+  onOpen,
+}: {
+  study: CaseStudy;
+  index: number;
+  onOpen: () => void;
+}) {
+  return (
+    <motion.button
+      type="button"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.45, delay: index * 0.08 }}
+      onClick={onOpen}
+      className="group flex h-full flex-col overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.03] text-left transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.05]"
+    >
+      <div className="relative aspect-[4/3] overflow-hidden border-b border-white/10 bg-neutral-900">
+        <ImageWithFallback
+          src={study.heroImage}
+          alt={study.title}
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/25 to-transparent" />
+      </div>
+
+      <div className="flex flex-1 flex-col gap-6 p-6 sm:p-7">
+        <div className="space-y-3">
+          <div className="flex items-center justify-between gap-4">
+            <span className="text-xs uppercase tracking-[0.24em] text-neutral-500">Case Study {index + 1}</span>
+            <ArrowRight className="h-4 w-4 text-neutral-500 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-white" />
+          </div>
+          <div>
+            <h3 className="text-2xl text-white sm:text-[1.75rem]">{study.title}</h3>
+            <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-neutral-400 sm:text-[15px]">
+              {study.tagline}
+            </p>
+          </div>
+        </div>
+
+        <div className="grid gap-3 border-t border-white/10 pt-5 text-sm text-neutral-400">
+          <div className="flex items-start justify-between gap-4">
+            <span className="text-neutral-500">Company</span>
+            <span className="max-w-[70%] text-right text-neutral-300">{study.context.company}</span>
+          </div>
+          <div className="flex items-start justify-between gap-4">
+            <span className="text-neutral-500">Duration</span>
+            <span className="text-right text-neutral-300">{study.context.duration}</span>
+          </div>
+          <div className="flex items-start justify-between gap-4">
+            <span className="text-neutral-500">Role</span>
+            <span className="max-w-[70%] text-right text-neutral-300">{study.context.myRole}</span>
+          </div>
+        </div>
+
+        <div className="mt-auto flex items-center justify-between border-t border-white/10 pt-5 text-sm text-neutral-400">
+          <span>Open full details</span>
+          <span className="text-neutral-500">{study.outcomes.length} outcomes</span>
+        </div>
+      </div>
+    </motion.button>
+  );
+}
+
+function CaseStudyWindow({
+  study,
+  open,
+  onOpenChange,
+}: {
+  study: CaseStudy | null;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
   const [imageScale, setImageScale] = useState(1);
+  const [activeSection, setActiveSection] = useState("case-study-problem");
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   const handleZoomIn = () => {
-    setImageScale(prev => Math.min(prev + 0.5, 3));
+    setImageScale((prev) => Math.min(prev + 0.5, 3));
   };
 
   const handleZoomOut = () => {
-    setImageScale(prev => Math.max(prev - 0.5, 1));
+    setImageScale((prev) => Math.max(prev - 0.5, 1));
   };
 
-  const handleCloseModal = () => {
+  const handleCloseImage = () => {
     setZoomedImage(null);
     setImageScale(1);
   };
 
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    setActiveSection(id);
+    element?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  useEffect(() => {
+    setActiveSection("case-study-problem");
+  }, [study?.title, open]);
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+
+    if (!container || !open) {
+      return;
+    }
+
+    const updateActiveSection = () => {
+      const containerTop = container.getBoundingClientRect().top;
+      let currentSection = caseStudySections[0]?.id ?? "case-study-problem";
+      let smallestOffset = Number.POSITIVE_INFINITY;
+
+      caseStudySections.forEach((section) => {
+        const element = document.getElementById(section.id);
+
+        if (!element) {
+          return;
+        }
+
+        const offset = Math.abs(element.getBoundingClientRect().top - containerTop - 24);
+
+        if (element.getBoundingClientRect().top - containerTop <= 80 && offset < smallestOffset) {
+          smallestOffset = offset;
+          currentSection = section.id;
+        }
+      });
+
+      if (currentSection !== activeSection) {
+        setActiveSection(currentSection);
+      }
+    };
+
+    updateActiveSection();
+    container.addEventListener("scroll", updateActiveSection, { passive: true });
+
+    return () => {
+      container.removeEventListener("scroll", updateActiveSection);
+    };
+  }, [activeSection, open]);
+
+  if (!study) {
+    return null;
+  }
+
   return (
     <>
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.6, delay: index * 0.2 }}
-        className="group"
-      >
-        <div className="relative rounded-3xl overflow-hidden bg-neutral-900/50 backdrop-blur-sm border border-white/10">
-          {/* Header Image */}
-          <div className="relative h-64 sm:h-80 lg:h-96 overflow-hidden">
-            <ImageWithFallback
-              src={study.heroImage}
-              alt={study.title}
-              className="w-full h-auto"
-            />
-            <div className={`absolute inset-0 bg-gradient-to-b ${study.gradient}`} />
-            <div className="absolute inset-0 bg-neutral-950/75" />
-            
-            <div className="absolute inset-0 p-4 sm:p-6 lg:p-12 flex flex-col justify-end">
-              <h3 className="text-[32px] sm:text-3xl lg:text-5xl text-white mb-2 sm:mb-3">{study.title}</h3>
-              <p className="text-sm sm:text-lg text-white/80 mb-2 sm:mb-4 line-clamp-2 sm:line-clamp-none">{study.tagline}</p>
-              
-              {/* Context Pills - Hidden on mobile, shown on tablet+ */}
-              <div className="hidden sm:flex flex-wrap gap-3">
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20">
-                  <Users className="w-3.5 h-3.5" />
-                  <span className="text-sm">{study.context.team}</span>
-                </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20">
-                  <Clock className="w-3.5 h-3.5" />
-                  <span className="text-sm">{study.context.duration}</span>
-                </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20">
-                  <Target className="w-3.5 h-3.5" />
-                  <span className="text-sm">{study.context.myRole}</span>
-                </div>
-              </div>
-              
-              {/* Mobile-only simplified pills */}
-              <div className="flex sm:hidden gap-2">
-                <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-white/10 backdrop-blur-sm border border-white/20">
-                  <Clock className="w-3 h-3" />
-                  <span className="text-xs">{study.context.duration}</span>
-                </div>
-                <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-white/10 backdrop-blur-sm border border-white/20">
-                  <Target className="w-3 h-3" />
-                  <span className="text-xs">Lead Designer</span>
-                </div>
-              </div>
-            </div>
-          </div>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="max-h-[92vh] max-w-[min(1100px,calc(100vw-24px))] overflow-hidden border border-white/10 bg-[#0b0b0d] p-0 text-white sm:max-w-[min(1200px,calc(100vw-48px))]">
+          <DialogTitle className="sr-only">{study.title} case study</DialogTitle>
+          <DialogDescription className="sr-only">
+            Full details for the {study.title} case study.
+          </DialogDescription>
 
-          {/* Content */}
-          <div className="p-4 sm:p-6 lg:p-12 space-y-6 sm:space-y-8 lg:space-y-12">
-            {/* The Problem */}
-            <div>
-              <div className="inline-flex items-center gap-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-red-500/10 border border-red-500/20 mb-3 sm:mb-4">
-                <span className="text-xs sm:text-sm text-red-400">The Problem</span>
-              </div>
-              <p className="text-[15px] sm:text-base lg:text-lg text-neutral-300 leading-relaxed mb-3 sm:mb-4">{study.problem}</p>
-              <div className="p-3 sm:p-4 rounded-xl bg-red-500/5 border border-red-500/10">
-                <p className="text-sm text-neutral-400 leading-relaxed">{study.challenge}</p>
-              </div>
-            </div>
-
-            {/* My Approach - Detailed Process */}
-            <div>
-              <div className="inline-flex items-center gap-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-violet-500/10 border border-violet-500/20 mb-4 sm:mb-6">
-                <span className="text-xs sm:text-sm text-violet-400">My Approach</span>
-              </div>
-              
-              <div className="space-y-6 sm:space-y-8">
-                {study.approach.map((step, i) => (
-                  <div key={i}>
-                    {/* Mobile: Icon inline with title */}
-                    <div className="flex items-start gap-2 mb-2 sm:hidden">
-                      <div className="flex-shrink-0 w-6 h-6 rounded-lg bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 flex items-center justify-center">
-                        <step.icon className="w-4 h-4 text-violet-400" />
-                      </div>
-                      <h4 className="text-base text-white">{step.phase}</h4>
-                    </div>
-                    
-                    {/* Desktop: Icon on side */}
-                    <div className="hidden sm:flex gap-6">
-                      <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 flex items-center justify-center border border-white/10">
-                        <step.icon className="w-6 h-6 text-violet-400" />
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="text-lg text-white mb-2">{step.phase}</h4>
-                        <p className="text-base text-neutral-300 mb-4 leading-relaxed">{step.description}</p>
-                        <ul className="space-y-2">
-                          {step.details.map((detail, j) => (
-                            <li key={j} className="flex gap-3 text-sm text-neutral-400">
-                              <span className="text-violet-400 flex-shrink-0">→</span>
-                              <span>{detail}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                    
-                    {/* Mobile: Content only */}
-                    <div className="sm:hidden">
-                      <p className="text-[15px] text-neutral-300 mb-3 leading-relaxed">{step.description}</p>
-                      <ul className="space-y-1.5">
-                        {step.details.map((detail, j) => (
-                          <li key={j} className="flex gap-2 text-sm text-neutral-400">
-                            <span className="text-violet-400 flex-shrink-0">→</span>
-                            <span>{detail}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+          <div ref={scrollContainerRef} className="max-h-[92vh] overflow-y-auto">
+            <div className="border-b border-white/10">
+              <div className="grid gap-0 lg:grid-cols-[1.2fr_0.8fr]">
+                <div className="relative min-h-[320px] overflow-hidden bg-neutral-900">
+                  <ImageWithFallback
+                    src={study.heroImage}
+                    alt={study.title}
+                    className="h-full w-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0b0b0d] via-[#0b0b0d]/35 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
+                    <SectionLabel>Case Study</SectionLabel>
+                    <h3 className="mt-4 max-w-2xl text-3xl text-white sm:text-4xl">{study.title}</h3>
+                    <p className="mt-3 max-w-2xl text-base leading-relaxed text-neutral-300 sm:text-lg">
+                      {study.tagline}
+                    </p>
                   </div>
-                ))}
+                </div>
+
+                <div className="grid gap-4 bg-white/[0.02] p-6 sm:grid-cols-2 sm:p-8 lg:grid-cols-1">
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                    <p className="text-xs uppercase tracking-[0.2em] text-neutral-500">Company</p>
+                    <p className="mt-3 text-sm leading-relaxed text-neutral-200">{study.context.company}</p>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                    <p className="text-xs uppercase tracking-[0.2em] text-neutral-500">Duration</p>
+                    <p className="mt-3 text-sm leading-relaxed text-neutral-200">{study.context.duration}</p>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                    <p className="text-xs uppercase tracking-[0.2em] text-neutral-500">Team</p>
+                    <p className="mt-3 text-sm leading-relaxed text-neutral-200">{study.context.team}</p>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                    <p className="text-xs uppercase tracking-[0.2em] text-neutral-500">My Role</p>
+                    <p className="mt-3 text-sm leading-relaxed text-neutral-200">{study.context.myRole}</p>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Process Images */}
-            {study.processImages.length > 0 && (
-              <div>
-                <h4 className="text-lg sm:text-xl lg:text-2xl text-white mb-4 sm:mb-6">Process & Iteration</h4>
-                <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
-                  {study.processImages.map((img, i) => (
-                    <div key={i} className="group/img">
-                      <div className="relative rounded-xl overflow-hidden mb-2 sm:mb-3 bg-neutral-900">
-                        <ImageWithFallback
-                          src={img.url}
-                          alt={img.caption}
-                          className="w-full aspect-video object-cover transition-transform duration-300 group-hover/img:scale-105"
-                        />
-                        <div className="absolute top-2 left-2 sm:top-3 sm:left-3">
-                          <span className="px-2 py-0.5 sm:py-1 rounded text-xs bg-black/50 backdrop-blur-sm text-white border border-white/20">
-                            {img.phase}
-                          </span>
+            <div className="grid gap-10 p-6 sm:p-8 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-14 lg:p-10">
+              <aside className="space-y-4 lg:sticky lg:top-0 lg:self-start">
+                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                  <p className="text-xs uppercase tracking-[0.24em] text-neutral-500">Inside This Case Study</p>
+                  <div className="mt-4 space-y-1 text-sm text-neutral-300">
+                    {caseStudySections.map((section) => (
+                      <button
+                        key={section.id}
+                        type="button"
+                        onClick={() => scrollToSection(section.id)}
+                        className={`block w-full rounded-xl px-3 py-2 text-left transition-colors ${
+                          activeSection === section.id
+                            ? "bg-white/10 text-white"
+                            : "text-neutral-300 hover:bg-white/5 hover:text-white"
+                        }`}
+                      >
+                        {section.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </aside>
+
+              <div className="space-y-10">
+                <section id="case-study-problem" className="scroll-mt-8 space-y-4">
+                  <SectionLabel>The Problem</SectionLabel>
+                  <p className="text-base leading-relaxed text-neutral-300">{study.problem}</p>
+                </section>
+
+                <section id="case-study-challenge" className="scroll-mt-8 space-y-4">
+                  <SectionLabel>The Challenge</SectionLabel>
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
+                    <p className="text-base leading-relaxed text-neutral-300">{study.challenge}</p>
+                  </div>
+                </section>
+
+                <section id="case-study-approach" className="scroll-mt-8 space-y-5">
+                  <SectionLabel>My Approach</SectionLabel>
+                  <div className="space-y-4">
+                    {study.approach.map((step, index) => (
+                      <div
+                        key={index}
+                        className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6"
+                      >
+                        <div className="flex items-start gap-4">
+                          <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
+                            <step.icon className="h-5 w-5 text-neutral-200" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <h4 className="text-lg text-white">{step.phase}</h4>
+                            <p className="mt-2 text-sm leading-relaxed text-neutral-300 sm:text-base">
+                              {step.description}
+                            </p>
+                            <ul className="mt-4 space-y-2">
+                              {step.details.map((detail, detailIndex) => (
+                                <li key={detailIndex} className="flex gap-3 text-sm leading-relaxed text-neutral-400">
+                                  <span className="mt-0.5 text-neutral-500">/</span>
+                                  <span>{detail}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
                         </div>
                       </div>
-                      <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">{img.caption}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Key Insight */}
-            <div className="relative p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl bg-gradient-to-br from-amber-500/10 via-transparent to-orange-500/10 border border-amber-500/20">
-              <div className="flex items-start gap-3 sm:gap-4">
-                <Lightbulb className="hidden sm:block w-5 h-5 sm:w-6 sm:h-6 text-amber-400 flex-shrink-0 mt-0.5 sm:mt-1" />
-                <div>
-                  <h4 className="text-base sm:text-lg lg:text-xl text-amber-400 mb-2 sm:mb-3 flex items-center gap-2">
-                    <Lightbulb className="sm:hidden w-5 h-5 text-amber-400 flex-shrink-0" />
-                    Key Insight
-                  </h4>
-                  <p className="text-sm sm:text-base lg:text-lg text-neutral-300 leading-relaxed italic">"{study.keyInsight}"</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Expandable section */}
-            <motion.div
-              initial={false}
-              animate={{ height: isExpanded ? "auto" : 0 }}
-              className="overflow-hidden"
-            >
-              <div className="space-y-8 sm:space-y-12">
-                {/* The Solution */}
-                <div>
-                  <div className="inline-flex items-center gap-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-green-500/10 border border-green-500/20 mb-3 sm:mb-4">
-                    <span className="text-xs sm:text-sm text-green-400">The Solution</span>
+                    ))}
                   </div>
-                  <p className="text-sm sm:text-base lg:text-lg text-neutral-300 leading-relaxed mb-6 sm:mb-8 whitespace-pre-line">{study.solution}</p>
-                  
-                  {/* Solution Images */}
-                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                    {study.solutionImages.map((img, i) => (
-                      <div 
-                        key={i} 
-                        className="group/solution rounded-lg sm:rounded-xl overflow-hidden bg-neutral-900 cursor-pointer hover:ring-2 hover:ring-violet-400/50 transition-all"
+                </section>
+
+                {study.processImages.length > 0 && (
+                  <section className="space-y-5">
+                    <SectionLabel>Process & Iteration</SectionLabel>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      {study.processImages.map((img, index) => (
+                        <div key={index} className="rounded-2xl border border-white/10 bg-white/[0.03] p-3">
+                          <div className="overflow-hidden rounded-xl">
+                            <ImageWithFallback
+                              src={img.url}
+                              alt={img.caption}
+                              className="aspect-video w-full object-cover"
+                            />
+                          </div>
+                          <div className="mt-3 flex items-center justify-between gap-3">
+                            <p className="text-sm text-neutral-300">{img.caption}</p>
+                            <span className="text-xs uppercase tracking-[0.18em] text-neutral-500">{img.phase}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                )}
+
+                <section id="case-study-insight" className="scroll-mt-8 space-y-4">
+                  <SectionLabel>Key Insight</SectionLabel>
+                  <div className="rounded-2xl border border-amber-500/15 bg-amber-500/[0.05] p-5 sm:p-6">
+                    <p className="text-base italic leading-relaxed text-neutral-200">"{study.keyInsight}"</p>
+                  </div>
+                </section>
+
+                <section id="case-study-solution" className="scroll-mt-8 space-y-5">
+                  <SectionLabel>The Solution</SectionLabel>
+                  <p className="whitespace-pre-line text-base leading-relaxed text-neutral-300">{study.solution}</p>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    {study.solutionImages.map((img, index) => (
+                      <button
+                        key={index}
+                        type="button"
                         onClick={() => setZoomedImage(img)}
+                        className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] text-left"
                       >
                         <ImageWithFallback
                           src={img}
-                          alt={`Solution screenshot ${i + 1}`}
-                          className="w-full aspect-video object-cover group-hover/solution:scale-105 transition-transform duration-300"
+                          alt={`${study.title} solution screenshot ${index + 1}`}
+                          className="aspect-video w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                         />
+                      </button>
+                    ))}
+                  </div>
+                </section>
+
+                <section id="case-study-outcomes" className="scroll-mt-8 space-y-5">
+                  <SectionLabel>Impact & Outcomes</SectionLabel>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    {study.outcomes.map((outcome, index) => (
+                      <div
+                        key={index}
+                        className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6"
+                      >
+                        <p className="text-base text-white sm:text-lg">{outcome.metric}</p>
+                        <p className="mt-2 text-sm leading-relaxed text-neutral-400">{outcome.description}</p>
                       </div>
                     ))}
                   </div>
-                </div>
+                </section>
 
-                {/* Outcomes */}
-                <div>
-                  <div className="inline-flex items-center gap-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 mb-4 sm:mb-6">
-                    <span className="text-xs sm:text-sm text-cyan-400">Impact & Outcomes</span>
+                <section id="case-study-learnings" className="scroll-mt-8 space-y-5">
+                  <SectionLabel>What I Learned</SectionLabel>
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
+                    <ul className="space-y-3">
+                      {study.learnings.map((learning, index) => (
+                        <li key={index} className="flex gap-3 text-sm leading-relaxed text-neutral-300 sm:text-base">
+                          <span className="mt-0.5 text-neutral-500">/</span>
+                          <span>{learning}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
-                    {study.outcomes.map((outcome, i) => (
-                      <div key={i} className="p-4 sm:p-6 rounded-xl bg-white/5 border border-white/10">
-                        <div className="text-base sm:text-xl lg:text-2xl text-white mb-1.5 sm:mb-2">{outcome.metric}</div>
-                        <p className="text-xs sm:text-sm text-neutral-400">{outcome.description}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* What I Learned */}
-                <div>
-                  <div className="inline-flex items-center gap-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-purple-500/10 border border-purple-500/20 mb-3 sm:mb-4">
-                    <span className="text-xs sm:text-sm text-purple-400">What I Learned</span>
-                  </div>
-                  <ul className="space-y-2 sm:space-y-3">
-                    {study.learnings.map((learning, i) => (
-                      <li key={i} className="flex gap-2 sm:gap-4 text-xs sm:text-sm lg:text-base text-neutral-300 leading-relaxed">
-                        <span className="text-violet-400 flex-shrink-0 text-sm sm:text-lg">→</span>
-                        <span>{learning}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                </section>
               </div>
-            </motion.div>
-
-            {/* Toggle button */}
-            <button
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="w-full flex items-center justify-center gap-2 px-4 sm:px-6 py-3 sm:py-4 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors text-white group/btn"
-            >
-              <span className="text-sm sm:text-base lg:text-lg">{isExpanded ? "Show Less" : "Read Full Case Study"}</span>
-              <motion.div
-                animate={{ rotate: isExpanded ? 180 : 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 rotate-90" />
-              </motion.div>
-            </button>
+            </div>
           </div>
-        </div>
-      </motion.div>
+        </DialogContent>
+      </Dialog>
 
-      {/* Zoomed Image Dialog */}
       {zoomedImage && (
-        <Dialog open={!!zoomedImage} onOpenChange={handleCloseModal}>
-          <DialogContent 
-            className="!max-w-full !max-h-[98vh] !w-full !h-fit p-0 sm:p-2 bg-neutral-950/95 backdrop-blur-xl border-0 sm:border border-white/10"
-          >
-            <DialogTitle className="sr-only">Design Mockup</DialogTitle>
-            <DialogDescription className="sr-only">
-              Enlarged view of design mockup
-            </DialogDescription>
-            
-            <div className="relative overflow-auto max-h-[calc(100vh-80px)] sm:max-h-[94vh] w-full [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <Dialog open={!!zoomedImage} onOpenChange={handleCloseImage}>
+          <DialogContent className="max-h-[96vh] max-w-[min(1400px,calc(100vw-16px))] overflow-hidden border border-white/10 bg-neutral-950 p-0 sm:max-w-[min(1400px,calc(100vw-48px))]">
+            <DialogTitle className="sr-only">Design mockup</DialogTitle>
+            <DialogDescription className="sr-only">Expanded design mockup view.</DialogDescription>
+
+            <div className="max-h-[calc(96vh-72px)] overflow-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
               <img
                 src={zoomedImage}
                 alt="Zoomed design mockup"
-                className="w-full h-auto object-contain rounded-none sm:rounded-lg transition-transform duration-200"
-                style={{ 
+                className="h-auto w-full object-contain transition-transform duration-200"
+                style={{
                   transform: `scale(${imageScale})`,
-                  transformOrigin: 'top left',
+                  transformOrigin: "top left",
                 }}
               />
             </div>
-            
-            {/* Mobile-only zoom controls - positioned below image */}
-            <div className="sm:hidden flex items-center justify-center gap-2 px-3 py-3 bg-neutral-950/95">
+
+            <div className="flex items-center justify-center gap-2 border-t border-white/10 bg-black/30 px-4 py-3">
               <button
-                className="p-2 rounded-full hover:bg-white/10 transition-colors disabled:opacity-50 bg-black/80 border border-white/20"
+                className="rounded-full border border-white/10 bg-white/5 p-2 transition-colors hover:bg-white/10 disabled:opacity-50"
                 onClick={handleZoomOut}
                 disabled={imageScale <= 1}
               >
-                <ZoomOut className="w-5 h-5 text-white" />
+                <ZoomOut className="h-5 w-5 text-white" />
               </button>
-              <span className="text-xs text-white font-medium min-w-[3rem] text-center px-3 py-2 rounded-full bg-black/80 border border-white/20">
+              <span className="min-w-[3.25rem] rounded-full border border-white/10 bg-white/5 px-3 py-1 text-center text-xs text-white">
                 {Math.round(imageScale * 100)}%
               </span>
               <button
-                className="p-2 rounded-full hover:bg-white/10 transition-colors disabled:opacity-50 bg-black/80 border border-white/20"
+                className="rounded-full border border-white/10 bg-white/5 p-2 transition-colors hover:bg-white/10 disabled:opacity-50"
                 onClick={handleZoomIn}
                 disabled={imageScale >= 3}
               >
-                <ZoomIn className="w-5 h-5 text-white" />
+                <ZoomIn className="h-5 w-5 text-white" />
               </button>
             </div>
           </DialogContent>
@@ -676,37 +777,55 @@ function CaseStudyDetail({ study, index }: { study: CaseStudy; index: number }) 
 }
 
 export function Work() {
+  const [selectedStudy, setSelectedStudy] = useState<CaseStudy | null>(null);
+
   return (
-    <section id="work" className="relative px-4 sm:px-6 lg:px-12 py-20 sm:py-32 lg:py-40">
-      <div className="max-w-6xl mx-auto">
-        {/* Section header */}
+    <section id="work" className="relative px-4 py-20 sm:px-6 sm:py-32 lg:px-12 lg:py-40">
+      <div className="mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-20"
+          className="mb-16 sm:mb-20"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 mb-6">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm">
             <span className="text-sm text-neutral-300">Case Studies</span>
           </div>
-          
-          <h2 className="text-5xl lg:text-7xl mb-6">
-            How I <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 text-transparent bg-clip-text">Think & Work</span>
+
+          <h2 className="mb-6 text-5xl lg:text-7xl">
+            How I{" "}
+            <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent">
+              Think & Work
+            </span>
           </h2>
-          
-          <p className="text-lg sm:text-xl text-neutral-400 max-w-3xl leading-relaxed">
-            A look inside my design process; the thinking, the iterations, and the lessons learned.
+
+          <p className="max-w-2xl text-lg leading-relaxed text-neutral-400 sm:text-xl">
+            A quieter, more focused overview of each project. Open any case study to see the full story.
           </p>
         </motion.div>
 
-        {/* Case Studies */}
-        <div className="space-y-20">
+        <div className="grid gap-6 lg:grid-cols-3">
           {caseStudies.map((study, index) => (
-            <CaseStudyDetail key={index} study={study} index={index} />
+            <CaseStudyCard
+              key={study.title}
+              study={study}
+              index={index}
+              onOpen={() => setSelectedStudy(study)}
+            />
           ))}
         </div>
       </div>
+
+      <CaseStudyWindow
+        study={selectedStudy}
+        open={!!selectedStudy}
+        onOpenChange={(open) => {
+          if (!open) {
+            setSelectedStudy(null);
+          }
+        }}
+      />
     </section>
   );
 }
