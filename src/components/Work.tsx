@@ -1,8 +1,10 @@
 import { motion } from "motion/react";
+import gsap from "gsap";
 import { ArrowRight, Search, Lightbulb, TestTube, Rocket, ZoomIn, ZoomOut } from "lucide-react";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "./ui/dialog";
 import { ImageWithFallback } from "./ImageWithFallback";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "./ui/carousel";
 import dashboardImg from "../assets/dashboard.png";
 import walletImg from "../assets/wallet.png";
 import icoSetupImg from "../assets/ico-setup.png";
@@ -20,6 +22,13 @@ import invoisureMerchantPortalImg from "../assets/invoisure-customer-management.
 import invoisureCustomerScreenImg from "../assets/invoisure-invoice.png";
 import invoisureEmailTemplateImg from "../assets/invoisure-email-template.png";
 import invoisureHeroImg from "../assets/Invoisure_hero.png";
+import heyUliLandingImg from "../assets/hey-uli-landing.png";
+import heyUliProductRegistrationChatImg from "../assets/hey-uli-product-registration-chat.png";
+import heyUliProductRegistrationSuccessImg from "../assets/hey-uli-product-registration-success.png";
+import heyUliServiceRequestChatImg from "../assets/hey-uli-service-request-chat.png";
+import heyUliServiceRequestSuccessImg from "../assets/hey-uli-service-request-success.png";
+import heyUliServiceCenterChatImg from "../assets/hey-uli-service-center-chat.png";
+import heyUliServiceCenterSuccessImg from "../assets/hey-uli-service-center-success.png";
 
 interface ProjectContext {
   company: string;
@@ -47,6 +56,11 @@ interface CaseStudy {
     details: string[];
   }[];
   processImages: ProcessImage[];
+  aiBehaviorDecisions?: string[];
+  launchEvidence?: {
+    signal: string;
+    description: string;
+  }[];
   keyInsight: string;
   solution: string;
   solutionImages: string[];
@@ -63,6 +77,8 @@ const caseStudySections = [
   { id: "case-study-problem", label: "The Problem" },
   { id: "case-study-challenge", label: "The Challenge" },
   { id: "case-study-approach", label: "My Approach" },
+  { id: "case-study-ai-decisions", label: "AI Decisions" },
+  { id: "case-study-launch-evidence", label: "Launch Evidence" },
   { id: "case-study-insight", label: "Key Insight" },
   { id: "case-study-solution", label: "The Solution" },
   { id: "case-study-outcomes", label: "Impact & Outcomes" },
@@ -70,6 +86,137 @@ const caseStudySections = [
 ] as const;
 
 const caseStudies: CaseStudy[] = [
+  {
+    title: "Hey Uli",
+    tagline: "Designing an AI-native support experience with intent detection, guided troubleshooting, and human escalation",
+    context: {
+      company: "Music Tribe",
+      duration: "4 months",
+      team: "Sole Product Designer, Uli Behringer, engineering team",
+      myRole: "Sole Product Designer, AI Experience Designer, Prototype Lead"
+    },
+    problem: "Music Tribe customers had to navigate static CRM forms and understand the company's internal support structure before they could get help. A customer might need product registration, troubleshooting, a service center, billing support, or human escalation, but the burden was on them to pick the right path and provide enough context. Missing or unclear information created extra follow-up work for support agents and slowed down resolution.",
+    challenge: "The design challenge was to turn Uli's vision of a digital customer-facing assistant into a real AI-native product experience. Hey Uli needed to feel conversational and personal, detect customer intent from natural language, guide users through support tasks, know when to stop and escalate, and hand human agents cleaner context without feeling like a generic chatbot bolted onto a form.",
+    approach: [
+      {
+        phase: "AI Product Framing",
+        description: "I translated the vision of a digital version of Uli into a product concept focused on AI-native CRM and support. The experience was positioned as the primary support portal, not a secondary floating chatbot.",
+        icon: Search,
+        details: [
+          "Defined Hey Uli as a dedicated AI support experience for Music Tribe customers",
+          "Mapped key support intents: product registration, service request, troubleshooting, service center assistance, partner or billing concerns, and human escalation",
+          "Framed the product around natural customer input instead of forcing users to choose the correct support form",
+          "Used ChatGPT and Gemini to explore support scenarios, conversation structure, content variants, and edge cases"
+        ]
+      },
+      {
+        phase: "Intent-First Conversation Design",
+        description: "I designed the assistant around intent detection and progressive data collection. Customers could describe what they needed in their own words, while the system collected structured information behind the scenes.",
+        icon: Lightbulb,
+        details: [
+          "Designed conversational flows for product registration, guided troubleshooting, and service center assistance",
+          "Created quick replies, voice input, image attachment moments, and follow-up prompts for specific customer intents",
+          "Defined when the assistant should attempt resolution and when it should escalate to human support",
+          "Shaped success pages with reference IDs, warranty details, appointment information, next steps, and feedback options"
+        ]
+      },
+      {
+        phase: "AI-Assisted Prototyping",
+        description: "I used an AI-assisted workflow to move from concept to prototype quickly. Figma Make supported rapid product exploration, while ChatGPT, Gemini, and Nano Banana helped with research, content exploration, and visual asset direction.",
+        icon: TestTube,
+        details: [
+          "Built the prototype in Figma Make to test the end-to-end support experience",
+          "Used AI tools to explore assistant tone, support content patterns, visual directions, and scenario variations",
+          "Iterated the assistant from a generic human avatar toward a more Uli-like customer-facing personality",
+          "Created a personality direction that made the assistant pragmatic, direct, firm, sincere, and helpful"
+        ]
+      },
+      {
+        phase: "Handoff & Launch",
+        description: "After multiple reviews with Uli, I refined the prototype and prepared it for engineering handoff. The product was later launched publicly on the Music Tribe website.",
+        icon: Rocket,
+        details: [
+          "Reviewed the prototype with Uli and refined the product based on feedback about personality, avatar direction, and experience positioning",
+          "Defined human escalation logic and agent-side context needs for cleaner ticket handoff",
+          "Documented customer-facing flows and internal support expectations for engineering",
+          "Delivered a launch-ready AI support concept that became a live public product by April 2026"
+        ]
+      }
+    ],
+    processImages: [
+      {
+        url: heyUliProductRegistrationChatImg,
+        caption: "Intent detection turns a natural customer request into a guided product registration flow with auto-detection and structured confirmation.",
+        phase: "Product Registration"
+      },
+      {
+        url: heyUliServiceRequestChatImg,
+        caption: "The assistant asks targeted questions, distinguishes IoT from analog products, and begins troubleshooting before creating a support ticket.",
+        phase: "Guided Troubleshooting"
+      },
+      {
+        url: heyUliServiceCenterChatImg,
+        caption: "Location-aware service center assistance helps customers move from asking for help to choosing an accredited repair option.",
+        phase: "Service Center Help"
+      }
+    ],
+    aiBehaviorDecisions: [
+      "Let customers start with natural language instead of choosing from internal support categories.",
+      "Detect support intent first, then collect only the fields needed for that specific workflow.",
+      "Use guided troubleshooting before creating a ticket when the issue can reasonably be diagnosed.",
+      "Escalate to a human agent when the issue is complex, unresolved, billing-related, partner-related, or outside the assistant's confidence.",
+      "Package the handoff with conversation history, issue classification, attempted troubleshooting, AI analysis, priority context, and suggested next steps."
+    ],
+    launchEvidence: [
+      {
+        signal: "Publicly Launched Product",
+        description: "The concept moved beyond exploration into a public AI support product on the Music Tribe website by April 2026."
+      },
+      {
+        signal: "Executive-Stakeholder Reviewed",
+        description: "The prototype was reviewed with Uli and refined around assistant personality, escalation behavior, and customer-facing support positioning."
+      },
+      {
+        signal: "Engineering Handoff",
+        description: "I documented the customer-facing flows and agent-side context requirements so the experience could be implemented as a real support workflow."
+      }
+    ],
+    keyInsight: "AI product design is not about adding a chatbot to an existing interface. The real design work is shaping how the AI behaves: how it detects intent, asks questions, attempts resolution, stops at the right moment, escalates responsibly, and supports the humans behind the workflow.",
+    solution: "I designed Hey Uli as a conversational AI support portal that replaced manual CRM forms with guided, intent-first support. Customers can start naturally through chat, voice, or image input. Hey Uli detects whether they need product registration, troubleshooting, service center assistance, or escalation, then asks only the information needed for that specific case. For common service issues, the assistant attempts guided troubleshooting before creating a ticket. For complex, billing, partner-related, or unresolved cases, Hey Uli escalates to a human agent with conversation history, attempted troubleshooting, issue classification, priority/SLA context, AI analysis, and suggested responses. The final experience made support feel more personal and adaptive while preparing internal teams with cleaner context.",
+    solutionImages: [
+      heyUliLandingImg,
+      heyUliProductRegistrationSuccessImg,
+      heyUliServiceRequestSuccessImg,
+      heyUliServiceCenterSuccessImg
+    ],
+    outcomes: [
+      {
+        metric: "Live AI Support Product",
+        description: "Moved from Uli's vision to a designed, prototyped, handed-off, and publicly launched AI support experience"
+      },
+      {
+        metric: "AI-Native CRM Direction",
+        description: "Reframed CRM support from static forms into conversational, intent-driven workflows aligned with Music Tribe's Industry 4.5/5.0 direction"
+      },
+      {
+        metric: "Better Human Escalation",
+        description: "Designed the assistant to pass support agents cleaner context, including conversation history, attempted troubleshooting, AI analysis, and suggested responses"
+      },
+      {
+        metric: "AI-Assisted Design Workflow",
+        description: "Used Figma Make, ChatGPT, Gemini, and Nano Banana to accelerate research, prototyping, content exploration, and visual direction"
+      }
+    ],
+    learnings: [
+      "AI experiences need clear behavioral boundaries. The assistant must know when to guide, when to resolve, and when to escalate.",
+      "Personality matters in AI products. Hey Uli needed to feel pragmatic, sincere, and direct, not like a generic support bot.",
+      "AI can improve both sides of support: the customer experience and the agent workflow behind it.",
+      "The strongest AI workflows combine natural conversation with structured data collection behind the scenes.",
+      "Designing with AI tools can speed up exploration, but the designer still has to shape judgment, trust, tone, and product behavior."
+    ],
+    heroImage: heyUliLandingImg,
+    gradient: "from-violet-500/20 to-fuchsia-500/20"
+  },
   {
     title: "Invoisure",
     tagline: "Unifying Merchant Operations Through Intelligent Workflow Design",
@@ -419,7 +566,7 @@ function CaseStudyCard({
           </div>
           <div>
             <h3 className="text-2xl text-white sm:text-[1.75rem]">{study.title}</h3>
-            <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-neutral-400 sm:text-[15px]">
+            <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-neutral-200 sm:text-[15px]">
               {study.tagline}
             </p>
           </div>
@@ -530,6 +677,18 @@ function CaseStudyWindow({
     return null;
   }
 
+  const visibleCaseStudySections = caseStudySections.filter((section) => {
+    if (section.id === "case-study-ai-decisions") {
+      return !!study.aiBehaviorDecisions?.length;
+    }
+
+    if (section.id === "case-study-launch-evidence") {
+      return !!study.launchEvidence?.length;
+    }
+
+    return true;
+  });
+
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
@@ -552,7 +711,7 @@ function CaseStudyWindow({
                   <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
                     <SectionLabel>Case Study</SectionLabel>
                     <h3 className="mt-4 max-w-2xl text-3xl text-white sm:text-4xl">{study.title}</h3>
-                    <p className="mt-3 max-w-2xl text-base leading-relaxed text-neutral-300 sm:text-lg">
+                    <p className="mt-3 max-w-2xl text-base leading-relaxed text-neutral-200 sm:text-lg">
                       {study.tagline}
                     </p>
                   </div>
@@ -584,7 +743,7 @@ function CaseStudyWindow({
                 <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
                   <p className="text-xs uppercase tracking-[0.24em] text-neutral-500">Inside This Case Study</p>
                   <div className="mt-4 space-y-1 text-sm text-neutral-300">
-                    {caseStudySections.map((section) => (
+                    {visibleCaseStudySections.map((section) => (
                       <button
                         key={section.id}
                         type="button"
@@ -605,13 +764,13 @@ function CaseStudyWindow({
               <div className="space-y-10">
                 <section id="case-study-problem" className="scroll-mt-8 space-y-4">
                   <SectionLabel>The Problem</SectionLabel>
-                  <p className="text-base leading-relaxed text-neutral-300">{study.problem}</p>
+                  <p className="text-base leading-relaxed text-neutral-200">{study.problem}</p>
                 </section>
 
                 <section id="case-study-challenge" className="scroll-mt-8 space-y-4">
                   <SectionLabel>The Challenge</SectionLabel>
                   <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
-                    <p className="text-base leading-relaxed text-neutral-300">{study.challenge}</p>
+                    <p className="text-base leading-relaxed text-neutral-200">{study.challenge}</p>
                   </div>
                 </section>
 
@@ -629,12 +788,12 @@ function CaseStudyWindow({
                           </div>
                           <div className="min-w-0 flex-1">
                             <h4 className="text-lg text-white">{step.phase}</h4>
-                            <p className="mt-2 text-sm leading-relaxed text-neutral-300 sm:text-base">
+                            <p className="mt-2 text-sm leading-relaxed text-neutral-200 sm:text-base">
                               {step.description}
                             </p>
                             <ul className="mt-4 space-y-2">
                               {step.details.map((detail, detailIndex) => (
-                                <li key={detailIndex} className="flex gap-3 text-sm leading-relaxed text-neutral-400">
+                                <li key={detailIndex} className="flex gap-3 text-sm leading-relaxed text-neutral-200">
                                   <span className="mt-0.5 text-neutral-500">/</span>
                                   <span>{detail}</span>
                                 </li>
@@ -647,23 +806,66 @@ function CaseStudyWindow({
                   </div>
                 </section>
 
+                {!!study.aiBehaviorDecisions?.length && (
+                  <section id="case-study-ai-decisions" className="scroll-mt-8 space-y-5">
+                    <SectionLabel>AI Product Decisions</SectionLabel>
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
+                      <ol className="space-y-3">
+                        {study.aiBehaviorDecisions.map((decision, index) => (
+                          <li
+                            key={index}
+                            className="grid gap-3 text-sm leading-relaxed text-neutral-200 sm:grid-cols-[2.5rem_minmax(0,1fr)] sm:text-base"
+                          >
+                            <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xs text-neutral-400">
+                              {index + 1}
+                            </span>
+                            <span>{decision}</span>
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
+                  </section>
+                )}
+
                 {study.processImages.length > 0 && (
                   <section className="space-y-5">
                     <SectionLabel>Process & Iteration</SectionLabel>
                     <div className="grid gap-4 md:grid-cols-2">
                       {study.processImages.map((img, index) => (
                         <div key={index} className="rounded-2xl border border-white/10 bg-white/[0.03] p-3">
-                          <div className="overflow-hidden rounded-xl">
+                          <button
+                            type="button"
+                            onClick={() => setZoomedImage(img.url)}
+                            className="group block w-full overflow-hidden rounded-xl text-left"
+                            aria-label={`Open ${img.phase} process image`}
+                          >
                             <ImageWithFallback
                               src={img.url}
                               alt={img.caption}
-                              className="aspect-video w-full object-cover"
+                              className="aspect-video w-full origin-top scale-150 object-cover object-top transition-transform duration-300"
                             />
+                          </button>
+                          <div className="mt-4 space-y-2">
+                            <h4 className="text-xs uppercase tracking-[0.18em] text-neutral-400">{img.phase}</h4>
+                            <p className="text-sm leading-relaxed text-neutral-300">{img.caption}</p>
                           </div>
-                          <div className="mt-3 flex items-center justify-between gap-3">
-                            <p className="text-sm text-neutral-300">{img.caption}</p>
-                            <span className="text-xs uppercase tracking-[0.18em] text-neutral-500">{img.phase}</span>
-                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                )}
+
+                {!!study.launchEvidence?.length && (
+                  <section id="case-study-launch-evidence" className="scroll-mt-8 space-y-5">
+                    <SectionLabel>Launch Evidence</SectionLabel>
+                    <div className="grid gap-4 md:grid-cols-3">
+                      {study.launchEvidence.map((item, index) => (
+                        <div
+                          key={index}
+                          className="rounded-2xl border border-emerald-400/15 bg-emerald-400/[0.05] p-5"
+                        >
+                          <p className="text-sm text-white sm:text-base">{item.signal}</p>
+                          <p className="mt-2 text-sm leading-relaxed text-neutral-200">{item.description}</p>
                         </div>
                       ))}
                     </div>
@@ -679,7 +881,7 @@ function CaseStudyWindow({
 
                 <section id="case-study-solution" className="scroll-mt-8 space-y-5">
                   <SectionLabel>The Solution</SectionLabel>
-                  <p className="whitespace-pre-line text-base leading-relaxed text-neutral-300">{study.solution}</p>
+                  <p className="whitespace-pre-line text-base leading-relaxed text-neutral-200">{study.solution}</p>
                   <div className="grid gap-4 sm:grid-cols-2">
                     {study.solutionImages.map((img, index) => (
                       <button
@@ -691,7 +893,7 @@ function CaseStudyWindow({
                         <ImageWithFallback
                           src={img}
                           alt={`${study.title} solution screenshot ${index + 1}`}
-                          className="aspect-video w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                          className="aspect-video w-full origin-top scale-150 object-cover object-top transition-transform duration-300"
                         />
                       </button>
                     ))}
@@ -707,7 +909,7 @@ function CaseStudyWindow({
                         className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6"
                       >
                         <p className="text-base text-white sm:text-lg">{outcome.metric}</p>
-                        <p className="mt-2 text-sm leading-relaxed text-neutral-400">{outcome.description}</p>
+                        <p className="mt-2 text-sm leading-relaxed text-neutral-200">{outcome.description}</p>
                       </div>
                     ))}
                   </div>
@@ -718,7 +920,7 @@ function CaseStudyWindow({
                   <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
                     <ul className="space-y-3">
                       {study.learnings.map((learning, index) => (
-                        <li key={index} className="flex gap-3 text-sm leading-relaxed text-neutral-300 sm:text-base">
+                        <li key={index} className="flex gap-3 text-sm leading-relaxed text-neutral-200 sm:text-base">
                           <span className="mt-0.5 text-neutral-500">/</span>
                           <span>{learning}</span>
                         </li>
@@ -778,6 +980,74 @@ function CaseStudyWindow({
 
 export function Work() {
   const [selectedStudy, setSelectedStudy] = useState<CaseStudy | null>(null);
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+  const [activeCardIndex, setActiveCardIndex] = useState(1);
+  const cardShellRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const autoScrollRef = useRef<gsap.core.Tween | null>(null);
+
+  const setCardShellRef = useCallback((node: HTMLDivElement | null, index: number) => {
+    cardShellRefs.current[index] = node;
+  }, []);
+
+  useEffect(() => {
+    if (!carouselApi) {
+      return;
+    }
+
+    const syncActiveCard = () => {
+      setActiveCardIndex(carouselApi.selectedScrollSnap());
+    };
+
+    carouselApi.scrollTo(1, true);
+    syncActiveCard();
+    carouselApi.on("select", syncActiveCard);
+    carouselApi.on("reInit", syncActiveCard);
+
+    return () => {
+      carouselApi.off("select", syncActiveCard);
+      carouselApi.off("reInit", syncActiveCard);
+    };
+  }, [carouselApi]);
+
+  useEffect(() => {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    cardShellRefs.current.forEach((card, index) => {
+      if (!card) {
+        return;
+      }
+
+      const isActive = index === activeCardIndex;
+
+      gsap.to(card, {
+        y: isActive ? -12 : 22,
+        scale: isActive ? 1.08 : 0.86,
+        opacity: isActive ? 1 : 0.5,
+        filter: isActive ? "brightness(1.03) saturate(1)" : "brightness(0.62) saturate(0.75)",
+        duration: reduceMotion ? 0 : 0.75,
+        ease: "power3.out",
+        overwrite: "auto",
+      });
+    });
+  }, [activeCardIndex]);
+
+  useEffect(() => {
+    autoScrollRef.current?.kill();
+
+    if (!carouselApi || selectedStudy) {
+      return;
+    }
+
+    autoScrollRef.current = gsap.delayedCall(2.8, function autoAdvance() {
+      carouselApi.scrollNext();
+      autoScrollRef.current = gsap.delayedCall(2.8, autoAdvance);
+    });
+
+    return () => {
+      autoScrollRef.current?.kill();
+      autoScrollRef.current = null;
+    };
+  }, [carouselApi, selectedStudy]);
 
   return (
     <section id="work" className="relative px-4 py-20 sm:px-6 sm:py-32 lg:px-12 lg:py-40">
@@ -800,21 +1070,44 @@ export function Work() {
             </span>
           </h2>
 
-          <p className="max-w-2xl text-lg leading-relaxed text-neutral-400 sm:text-xl">
+          <p className="max-w-2xl text-lg leading-relaxed text-neutral-200 sm:text-xl">
             A quieter, more focused overview of each project. Open any case study to see the full story.
           </p>
         </motion.div>
 
-        <div className="grid gap-6 lg:grid-cols-3">
-          {caseStudies.map((study, index) => (
-            <CaseStudyCard
-              key={study.title}
-              study={study}
-              index={index}
-              onOpen={() => setSelectedStudy(study)}
-            />
-          ))}
-        </div>
+        <Carousel
+          setApi={setCarouselApi}
+          opts={{
+            align: "center",
+            loop: true,
+            duration: 34,
+          }}
+          className="overflow-visible"
+        >
+          <CarouselContent className="-ml-4 py-10 sm:-ml-5 lg:-ml-6">
+            {caseStudies.map((study, index) => (
+              <CarouselItem
+                key={study.title}
+                className="basis-[78%] pl-4 sm:basis-[48%] sm:pl-5 lg:basis-1/3 lg:pl-6"
+              >
+                <div
+                  ref={(node) => setCardShellRef(node, index)}
+                  className="h-full will-change-transform"
+                >
+                  <CaseStudyCard
+                    study={study}
+                    index={index}
+                    onOpen={() => setSelectedStudy(study)}
+                  />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <div className="mt-8 hidden justify-end gap-3 md:flex">
+            <CarouselPrevious className="static translate-x-0 translate-y-0 border-white/10 bg-white/5 text-white hover:bg-white/10 disabled:opacity-30" />
+            <CarouselNext className="static translate-x-0 translate-y-0 border-white/10 bg-white/5 text-white hover:bg-white/10 disabled:opacity-30" />
+          </div>
+        </Carousel>
       </div>
 
       <CaseStudyWindow

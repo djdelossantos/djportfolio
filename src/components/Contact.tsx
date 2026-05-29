@@ -18,10 +18,13 @@ export function Contact() {
           </div>
           
           <h2 className="text-5xl lg:text-7xl mb-6">
-            Let's <span className="text-neutral-500">Talk</span>
+            Let's{" "}
+            <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent">
+              Talk
+            </span>
           </h2>
           
-          <p className="text-lg sm:text-xl text-neutral-400 max-w-2xl mx-auto mb-12">
+          <p className="text-lg sm:text-xl text-neutral-200 max-w-2xl mx-auto mb-12">
             Interested in working together? I'd love to hear from you.
           </p>
 

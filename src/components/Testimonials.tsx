@@ -50,10 +50,13 @@ export function Testimonials() {
           </div>
           
           <h2 className="text-5xl lg:text-7xl mb-6">
-            What People <span className="text-neutral-500">Say</span>
+            What People{" "}
+            <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent">
+              Say
+            </span>
           </h2>
           
-          <p className="text-lg sm:text-xl text-neutral-400 max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl text-neutral-200 max-w-2xl mx-auto">
             Feedback from teammates, stakeholders, and collaborators I've worked with over the years.
           </p>
         </motion.div>
@@ -75,7 +78,7 @@ export function Testimonials() {
               </div>
 
               {/* Quote */}
-              <p className="text-neutral-300 leading-relaxed mb-6 italic">
+              <p className="text-neutral-200 leading-relaxed mb-6 italic">
                 "{testimonial.quote}"
               </p>
 
