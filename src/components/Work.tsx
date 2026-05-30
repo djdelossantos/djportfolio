@@ -57,6 +57,10 @@ interface CaseStudy {
     details: string[];
   }[];
   processImages: ProcessImage[];
+  evidence?: {
+    signal: string;
+    description: string;
+  }[];
   aiBehaviorDecisions?: string[];
   launchEvidence?: {
     signal: string;
@@ -78,6 +82,7 @@ const caseStudySections = [
   { id: "case-study-problem", label: "The Problem" },
   { id: "case-study-challenge", label: "The Challenge" },
   { id: "case-study-approach", label: "My Approach" },
+  { id: "case-study-evidence", label: "Signals & Feedback" },
   { id: "case-study-ai-decisions", label: "AI Decisions" },
   { id: "case-study-launch-evidence", label: "Launch Evidence" },
   { id: "case-study-insight", label: "Key Insight" },
@@ -161,6 +166,20 @@ const caseStudies: CaseStudy[] = [
         phase: "Service Center Help"
       }
     ],
+    evidence: [
+      {
+        signal: "Stakeholder Feedback",
+        description: "Uli was happy with the outcome and wanted the experience to move live quickly, validating the product direction and launch readiness."
+      },
+      {
+        signal: "Design Response",
+        description: "After feedback that the assistant should feel like a digital version of Uli, I shifted the avatar direction and response tone toward a more pragmatic, firm, and sincere personality."
+      },
+      {
+        signal: "Research Input",
+        description: "Competitive research and AI-assisted scenario exploration helped define familiar support patterns, intent categories, escalation moments, and conversational guardrails."
+      }
+    ],
     aiBehaviorDecisions: [
       "Let customers start with natural language instead of choosing from internal support categories.",
       "Detect support intent first, then collect only the fields needed for that specific workflow.",
@@ -193,7 +212,7 @@ const caseStudies: CaseStudy[] = [
     outcomes: [
       {
         metric: "Live AI Support Product",
-        description: "Moved from Uli's vision to a designed, prototyped, handed-off, and publicly launched AI support experience"
+        description: "Moved from Uli's vision to a designed, prototyped, stakeholder-approved, handed-off, and publicly launched AI support experience"
       },
       {
         metric: "AI-Native CRM Direction",
@@ -268,18 +287,32 @@ const caseStudies: CaseStudy[] = [
       },
       {
         phase: "Solution Delivery & Collaboration",
-        description: "I delivered complete design specifications for all platform layers and collaborated closely with development teams to ensure implementation fidelity. I also designed marketing materials to support product launch and merchant onboarding.",
+        description: "I delivered complete design specifications for all platform layers and collaborated closely with development teams to protect implementation fidelity while responding to technical constraints. I also designed marketing materials to support product launch and merchant onboarding.",
         icon: Rocket,
         details: [
           "Delivered high-fidelity mockups and interactive prototypes for admin, merchant, and customer portals",
           "Created detailed design specifications and developer handover documentation",
           "Designed marketing website communicating platform value and differentiation",
           "Collaborated with frontend and backend developers to resolve technical constraints without compromising UX",
-          "Iterated based on stakeholder feedback and early merchant testing"
+          "Iterated based on owner feedback, competitive research, and engineering feasibility"
         ]
       }
     ],
     processImages: [],
+    evidence: [
+      {
+        signal: "Stakeholder Feedback",
+        description: "The owner strongly supported the design direction, especially the Smart Insights concept for guiding merchant decisions."
+      },
+      {
+        signal: "Business Influence",
+        description: "The Smart Insights direction influenced the next product iteration, later continued by another team."
+      },
+      {
+        signal: "Constraint & Tradeoff",
+        description: "Engineering capacity made Smart Insights too large for the current build, so the concept was deferred while the platform shipped with clearer dashboards and reporting foundations."
+      }
+    ],
     keyInsight: "Combining things without making changes makes processes run more smoothly, but it can also damage brand identity. The hardest part of designing a multi-tenant SaaS is creating a system that feels unique to each user, where merchants can see how their business operates without losing the brand experience that makes their customer relationships special.",
     solution: "I designed Invoisure as a white-label financial platform that streamlines daily operations without stripping away a merchant's unique brand. To cut down on manual work and speed up payment collection, the core experience connects four key areas. The Merchant Dashboard gives users instant visibility into their day-to-day operational health, while the Customer Management directory makes it easy to track client details and billing history at a glance. I also designed flexible Payment & Invoicing workflows for one-time and recurring billing to remove friction and get merchants paid faster. Finally, highly customizable Email Templates ensure every automated notification feels true to the merchant's distinct brand instead of looking like a generic software receipt.",
     solutionImages: [
@@ -299,7 +332,7 @@ const caseStudies: CaseStudy[] = [
       },
       {
         metric: "Real-Time Merchant Insights",
-        description: "Delivered centralized reporting and audit trails providing visibility into sales, payments, and inventory"
+        description: "Delivered centralized reporting and audit trails, while setting the foundation for future Smart Insights once engineering capacity allowed"
       },
       {
         metric: "Faster Payment Collection",
@@ -378,6 +411,20 @@ const caseStudies: CaseStudy[] = [
       }
     ],
     processImages: [],
+    evidence: [
+      {
+        signal: "Stakeholder Feedback",
+        description: "The CEO approved the product direction because the design made a complex crypto-equity workflow easier for customers to understand."
+      },
+      {
+        signal: "Research Input",
+        description: "I studied blockchain, IPO structures, investor materials, compliance expectations, and competing crypto platforms to identify trust gaps and familiar patterns."
+      },
+      {
+        signal: "Launch Signal",
+        description: "The MVP launched publicly with complete ICO setup, legal review, investor participation, and marketing flows."
+      }
+    ],
     keyInsight: "Product readiness does not equal market readiness. In financial infrastructure products, trust-building and market education are as important as usability. A product can be technically ready and beautifully structured, yet still struggle without ecosystem trust, regulatory confidence, and public understanding. Infrastructure products must align with market maturity; not just feature completeness.",
     solution: "I designed CapchainX as a compliance-first ICO platform that prioritized clarity, transparency, and trust over speed and hype. The platform guided companies through structured ICO setup with educational guardrails, required legal documentation review, and provided real-time fundraising transparency. Every design decision emphasized legitimacy: KYC requirements, plain-language explanations, contextual education, and avoiding speculative messaging. The result was a product that successfully launched and was operationally ready; but taught me that infrastructure adoption requires ecosystem-level trust beyond interface clarity.",
     solutionImages: [
@@ -389,7 +436,7 @@ const caseStudies: CaseStudy[] = [
     outcomes: [
       {
         metric: "Successfully launched publicly",
-        description: "MVP delivered and approved by CEO as development-ready for early adopters"
+        description: "MVP delivered, CEO-approved, and launched publicly for early adopters"
       },
       {
         metric: "Complete platform infrastructure built",
@@ -421,14 +468,14 @@ const caseStudies: CaseStudy[] = [
       company: "MusicTribe (Music Technology & Community)",
       duration: "1.5 years",
       team: "Cross-functional team across product, business, and technical teams",
-      myRole: "End-to-end UX/UI Designer, Design System Owner, User Research Lead"
+      myRole: "End-to-end UX/UI Designer, Design System Owner, Marketplace Research Lead"
     },
     problem: "MusicTribe had an established global community where musicians and gear enthusiasts interacted with each other and with MusicTribe's brands. While active in discussions and brand engagement, there was no structured way for members to safely buy and sell music gear within the ecosystem. Community members faced a lack of trust when dealing with strangers, safety risks without proper safeguards, and high friction in peer-to-peer selling across external platforms. The platform needed to strengthen community engagement and extend the ecosystem beyond conversations into real transactions.",
     challenge: "The most significant constraint was the absence of a built-in payment system. Without transactional protection or an integrated payment solution, securing transactions end-to-end was inherently difficult and required alternative trust mechanisms. The platform needed to establish trust between strangers while preventing abuse and scams—all without the safety net of payment-backed guarantees.",
     approach: [
       {
         phase: "Research & Discovery",
-        description: "I conducted heavy user research and competitive analysis to understand how to build trust in a marketplace without payment protection. The focus was on understanding what makes users feel confident when transacting with strangers.",
+        description: "I used competitive research and stakeholder working sessions to understand how marketplaces create trust when transactions happen between strangers. The focus was identifying familiar safety patterns that could work without built-in payment protection.",
         icon: Search,
         details: [
           "Analyzed competitors like Reverb and eBay to understand trust mechanisms",
@@ -440,7 +487,7 @@ const caseStudies: CaseStudy[] = [
       },
       {
         phase: "Trust Strategy Design",
-        description: "Without payment system protection, I designed a multi-layered identity verification process. The insight was that trust was more important than speed; a marketplace can launch quickly, but without trust, it cannot sustain participation.",
+        description: "When the payment system was removed due to a management decision, I redesigned the trust model around identity, transparency, ratings, reporting, and traceable communication. The insight was that trust was more important than speed; without payment protection, the product had to make accountability visible.",
         icon: Lightbulb,
         details: [
           "Designed multi-layered identity verification (email, mobile, Facebook)",
@@ -487,6 +534,20 @@ const caseStudies: CaseStudy[] = [
         phase: "Design System"
       }
     ],
+    evidence: [
+      {
+        signal: "Stakeholder Feedback",
+        description: "Stakeholders approved the design direction and the product successfully launched publicly."
+      },
+      {
+        signal: "Constraint & Tradeoff",
+        description: "The original design included payments, but a business decision removed the payment system, forcing the experience to rely on stronger non-payment trust mechanisms."
+      },
+      {
+        signal: "Design Response",
+        description: "I studied marketplace trust patterns and designed safer seller onboarding, verification flows, ratings, reporting, and internal messaging to compensate for the missing payment layer."
+      }
+    ],
     keyInsight: "Trust is more important than speed. A marketplace can launch quickly, but without trust, it cannot sustain participation. Designing a marketplace is ultimately about building trust, not just product showcases.",
     solution: "I designed Free MusicTribe with trust embedded at every layer: multi-step identity verification for users and mandatory Shop accounts for sellers, in-platform messaging for auditability, transparent seller ratings and history, and intentional friction that encouraged buyer-seller confidence-building before transactions. Rather than optimizing for instant checkout, the platform emulated face-to-face transactions in a digital environment—prioritizing trust over speed.",
     solutionImages: [
@@ -498,7 +559,7 @@ const caseStudies: CaseStudy[] = [
     outcomes: [
       {
         metric: "Successfully launched to production",
-        description: "All planned V1 features shipped and approved for public launch"
+        description: "All adjusted V1 features shipped, received stakeholder approval, and launched publicly"
       },
       {
         metric: "Stakeholder alignment achieved",
@@ -517,6 +578,7 @@ const caseStudies: CaseStudy[] = [
       "If I were to redesign without a payment system again, I'd decouple exploration from verification; let users browse freely, only require KYC at point of transaction to reduce early abandonment",
       "Would invest more heavily in self-service enablement: guided onboarding tours, structured knowledge base, contextual tooltips; critical when operational support is limited",
       "As a senior designer, I would have more strongly advocated for a built-in or third-party payment system and dedicated administrators/moderators as core infrastructure, not optional enhancements",
+      "I would optimize the KYC process to better filter out bad actors while reducing unnecessary friction for legitimate buyers and sellers",
       "The lack of user support infrastructure significantly impacted adoption; without dedicated support personnel, users had limited assistance at critical moments that influence trust and engagement"
     ],
     heroImage: dribbbleUploadImg,
@@ -679,6 +741,10 @@ function CaseStudyWindow({
   }
 
   const visibleCaseStudySections = caseStudySections.filter((section) => {
+    if (section.id === "case-study-evidence") {
+      return !!study.evidence?.length;
+    }
+
     if (section.id === "case-study-ai-decisions") {
       return !!study.aiBehaviorDecisions?.length;
     }
@@ -819,6 +885,23 @@ function CaseStudyWindow({
                     ))}
                   </div>
                 </section>
+
+                {!!study.evidence?.length && (
+                  <section id="case-study-evidence" className="scroll-mt-8 space-y-4 sm:space-y-5">
+                    <SectionLabel>Signals & Feedback</SectionLabel>
+                    <div className="grid gap-3 md:grid-cols-3 md:gap-4">
+                      {study.evidence.map((item, index) => (
+                        <div
+                          key={index}
+                          className="rounded-xl border border-white/10 bg-white/[0.03] p-4 sm:rounded-2xl sm:p-5"
+                        >
+                          <p className="text-sm text-white sm:text-base">{item.signal}</p>
+                          <p className="mt-2 text-sm leading-relaxed text-neutral-200">{item.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                )}
 
                 {!!study.aiBehaviorDecisions?.length && (
                   <section id="case-study-ai-decisions" className="scroll-mt-8 space-y-4 sm:space-y-5">
