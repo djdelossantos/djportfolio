@@ -3,6 +3,7 @@ import { ArrowDown } from "lucide-react";
 import { useRef, useEffect, useLayoutEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { AnimatedHover } from "./AnimatedHover";
 import toolAdobeIllustrator from "../assets/tool-adobe-illustrator-cutout.png";
 import toolChatgpt from "../assets/tool-chatgpt-cutout.png";
 import toolClaude from "../assets/tool-claude-cutout.png";
@@ -62,6 +63,41 @@ const backgroundTools = [
   }
 ];
 
+const scrambleCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&";
+
+function scrambleTextTo(element: HTMLElement, finalText: string, delay: number) {
+  const state = { progress: 0 };
+
+  return gsap.to(state, {
+    progress: 1,
+    duration: 1.25,
+    delay,
+    ease: "power3.out",
+    onUpdate: () => {
+      const revealedCharacterCount = Math.floor(state.progress * finalText.length);
+      const scrambledText = finalText
+        .split("")
+        .map((character, index) => {
+          if (character === " ") {
+            return " ";
+          }
+
+          if (index < revealedCharacterCount) {
+            return character;
+          }
+
+          return scrambleCharacters[Math.floor(Math.random() * scrambleCharacters.length)];
+        })
+        .join("");
+
+      element.textContent = scrambledText;
+    },
+    onComplete: () => {
+      element.textContent = finalText;
+    }
+  });
+}
+
 function BackgroundToolIcon({
   tool,
   setShellRef,
@@ -93,6 +129,12 @@ export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const backgroundLayerRef = useRef<HTMLDivElement>(null);
   const photoRef = useRef<HTMLDivElement>(null);
+  const firstNameRef = useRef<HTMLSpanElement>(null);
+  const lastNameRef = useRef<HTMLSpanElement>(null);
+  const workArrowRef = useRef<SVGSVGElement>(null);
+  const workButtonFillRef = useRef<HTMLDivElement>(null);
+  const contactButtonFillRef = useRef<HTMLDivElement>(null);
+  const contactButtonLabelRef = useRef<HTMLSpanElement>(null);
   const backgroundIconShellRefs = useRef<(HTMLDivElement | null)[]>([]);
   const backgroundIconImageRefs = useRef<(HTMLImageElement | null)[]>([]);
   const mouseX = useMotionValue(0);
@@ -101,6 +143,117 @@ export function Hero() {
   const springConfig = { damping: 25, stiffness: 200 };
   const x = useSpring(mouseX, springConfig);
   const y = useSpring(mouseY, springConfig);
+
+  const animateWorkArrow = () => {
+    const arrow = workArrowRef.current;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (!arrow || prefersReducedMotion) {
+      return;
+    }
+
+    gsap.killTweensOf(arrow);
+    gsap.timeline()
+      .to(arrow, {
+        y: 18,
+        autoAlpha: 0,
+        duration: 0.16,
+        ease: "power2.in",
+      })
+      .set(arrow, { y: -16 })
+      .to(arrow, {
+        y: 0,
+        autoAlpha: 1,
+        duration: 0.32,
+        ease: "back.out(2)",
+      });
+  };
+
+  const handleWorkButtonEnter = () => {
+    const fill = workButtonFillRef.current;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    animateWorkArrow();
+
+    if (!fill) {
+      return;
+    }
+
+    gsap.to(fill, {
+      scaleY: 1,
+      duration: prefersReducedMotion ? 0 : 0.25,
+      ease: "power3.out",
+      overwrite: "auto",
+    });
+  };
+
+  const handleWorkButtonLeave = () => {
+    const fill = workButtonFillRef.current;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (!fill) {
+      return;
+    }
+
+    gsap.to(fill, {
+      scaleY: 0,
+      duration: prefersReducedMotion ? 0 : 0.38,
+      ease: "power3.inOut",
+      overwrite: "auto",
+    });
+  };
+
+  const handleContactButtonEnter = () => {
+    const fill = contactButtonFillRef.current;
+    const label = contactButtonLabelRef.current;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (!fill) {
+      return;
+    }
+
+    if (label) {
+      gsap.to(label, {
+        color: "#171717",
+        duration: prefersReducedMotion ? 0 : 0.18,
+        ease: "power2.out",
+        overwrite: "auto",
+      });
+    }
+
+    gsap.to(fill, {
+      scaleY: 1,
+      duration: prefersReducedMotion ? 0 : 0.25,
+      ease: "power3.out",
+      overwrite: "auto",
+    });
+  };
+
+  const handleContactButtonLeave = () => {
+    const fill = contactButtonFillRef.current;
+    const label = contactButtonLabelRef.current;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (!fill) {
+      return;
+    }
+
+    if (label) {
+      gsap.to(label, {
+        color: "#ffffff",
+        duration: prefersReducedMotion ? 0 : 0.18,
+        ease: "power2.out",
+        overwrite: "auto",
+      });
+    }
+
+    gsap.to(fill, {
+      scaleY: 0,
+      duration: prefersReducedMotion ? 0 : 0.38,
+      ease: "power3.inOut",
+      overwrite: "auto",
+    });
+  };
 
   useLayoutEffect(() => {
     const shells = backgroundIconShellRefs.current.filter(Boolean) as HTMLDivElement[];
@@ -177,6 +330,34 @@ export function Hero() {
           scrub: 1.2
         }
       });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  useLayoutEffect(() => {
+    const firstName = firstNameRef.current;
+    const lastName = lastNameRef.current;
+
+    if (!firstName || !lastName) {
+      return;
+    }
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReducedMotion) {
+      firstName.textContent = "DJ";
+      lastName.textContent = "Delos Santos";
+      return;
+    }
+
+    const ctx = gsap.context(() => {
+      firstName.textContent = "##";
+      lastName.textContent = "#### ######";
+
+      gsap.timeline({ delay: 0.55 })
+        .add(scrambleTextTo(firstName, "DJ", 0), 0)
+        .add(scrambleTextTo(lastName, "Delos Santos", 0.12), 0);
     }, sectionRef);
 
     return () => ctx.revert();
@@ -314,8 +495,8 @@ export function Hero() {
               letterSpacing: '-0.03em'
             }}
           >
-            <span className="block sm:inline text-white">DJ </span>
-            <span className="block sm:inline bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 text-transparent bg-clip-text">
+            <span ref={firstNameRef} className="block sm:inline text-white">DJ</span>{" "}
+            <span ref={lastNameRef} className="block sm:inline bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 text-transparent bg-clip-text">
               Delos Santos
             </span>
           </motion.h1>
@@ -343,23 +524,42 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.9 }}
           className="flex items-center justify-center gap-3 sm:gap-4"
         >
-          <a
-            href="#work"
-            className="group relative px-6 sm:px-8 py-3 sm:py-4 bg-white text-neutral-950 rounded-full overflow-hidden transition-transform hover:scale-105 text-sm sm:text-base"
-          >
-            <span className="relative z-10 flex items-center gap-2 whitespace-nowrap">
-              View My Work
-              <ArrowDown className="w-4 h-4 group-hover:translate-y-1 transition-transform" />
-            </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-violet-400 to-fuchsia-400 opacity-0 group-hover:opacity-100 transition-opacity" />
-          </a>
+          <AnimatedHover className="rounded-full">
+            <a
+              href="#work"
+              onPointerEnter={handleWorkButtonEnter}
+              onPointerLeave={handleWorkButtonLeave}
+              className="group relative block px-6 sm:px-8 py-3 sm:py-4 bg-white text-neutral-950 rounded-full overflow-hidden text-sm sm:text-base"
+            >
+              <span className="relative z-[2] flex items-center gap-2 whitespace-nowrap">
+                View My Work
+                <ArrowDown ref={workArrowRef} className="w-4 h-4" />
+              </span>
+              <div
+                ref={workButtonFillRef}
+                className="absolute inset-0 z-[1] origin-bottom bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400"
+                style={{ transform: "scaleY(0)" }}
+              />
+            </a>
+          </AnimatedHover>
           
-          <a
-            href="#contact"
-            className="px-6 sm:px-8 py-3 sm:py-4 rounded-full border border-white/20 text-white hover:bg-white/5 transition-colors backdrop-blur-sm text-sm sm:text-base whitespace-nowrap"
-          >
-            Get in Touch
-          </a>
+          <AnimatedHover className="rounded-full">
+            <a
+              href="#contact"
+              onPointerEnter={handleContactButtonEnter}
+              onPointerLeave={handleContactButtonLeave}
+              className="group relative block overflow-hidden px-6 sm:px-8 py-3 sm:py-4 rounded-full border border-white/20 text-white backdrop-blur-sm text-sm sm:text-base whitespace-nowrap"
+            >
+              <span ref={contactButtonLabelRef} className="relative z-[2]">
+                Get in Touch
+              </span>
+              <div
+                ref={contactButtonFillRef}
+                className="absolute inset-0 z-[1] origin-bottom bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400"
+                style={{ transform: "scaleY(0)" }}
+              />
+            </a>
+          </AnimatedHover>
         </motion.div>
       </div>
 

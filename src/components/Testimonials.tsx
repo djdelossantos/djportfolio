@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import { Quote } from "lucide-react";
+import { ScrambleText } from "./ScrambleText";
 
 interface Testimonial {
   quote: string;
@@ -50,10 +51,12 @@ export function Testimonials() {
           </div>
           
           <h2 className="text-5xl lg:text-7xl mb-6">
-            What People{" "}
-            <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent">
-              Say
-            </span>
+            <ScrambleText text="What People" />{" "}
+            <ScrambleText
+              text="Say"
+              delay={0.12}
+              className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent"
+            />
           </h2>
           
           <p className="text-lg sm:text-xl text-neutral-200 max-w-2xl mx-auto">

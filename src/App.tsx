@@ -3,6 +3,7 @@ import { Work } from "./components/Work";
 import { About } from "./components/About";
 import { Testimonials } from "./components/Testimonials";
 import { Contact } from "./components/Contact";
+import { BackToTop } from "./components/BackToTop";
 import { useEffect } from "react";
 
 export default function App() {
@@ -28,6 +29,8 @@ export default function App() {
         <About />
         <Contact />
       </div>
+
+      <BackToTop />
 
       {/* Custom animations */}
       <style>{`

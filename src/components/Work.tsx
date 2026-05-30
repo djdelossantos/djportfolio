@@ -1,10 +1,11 @@
 import { motion } from "motion/react";
 import gsap from "gsap";
-import { ArrowRight, Search, Lightbulb, TestTube, Rocket, ZoomIn, ZoomOut } from "lucide-react";
+import { ArrowRight, Search, Lightbulb, TestTube, Rocket, ZoomIn, ZoomOut, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "./ui/dialog";
 import { ImageWithFallback } from "./ImageWithFallback";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "./ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "./ui/carousel";
+import { ScrambleText } from "./ScrambleText";
 import dashboardImg from "../assets/dashboard.png";
 import walletImg from "../assets/wallet.png";
 import icoSetupImg from "../assets/ico-setup.png";
@@ -692,54 +693,57 @@ function CaseStudyWindow({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-h-[92vh] max-w-[min(1100px,calc(100vw-24px))] overflow-hidden border border-white/10 bg-[#0b0b0d] p-0 text-white sm:max-w-[min(1200px,calc(100vw-48px))]">
+        <DialogContent
+          hideCloseOnMobile
+          className="max-h-[94vh] max-w-[calc(100vw-12px)] overflow-hidden border border-white/10 bg-[#0b0b0d] p-0 text-white sm:max-h-[92vh] sm:max-w-[min(1200px,calc(100vw-48px))]"
+        >
           <DialogTitle className="sr-only">{study.title} case study</DialogTitle>
           <DialogDescription className="sr-only">
             Full details for the {study.title} case study.
           </DialogDescription>
 
-          <div ref={scrollContainerRef} className="max-h-[92vh] overflow-y-auto">
+          <div ref={scrollContainerRef} className="max-h-[94vh] overflow-y-auto pb-20 sm:max-h-[92vh] sm:pb-0">
             <div className="border-b border-white/10">
               <div className="grid gap-0 lg:grid-cols-[1.2fr_0.8fr]">
-                <div className="relative min-h-[320px] overflow-hidden bg-neutral-900">
+                <div className="relative min-h-[240px] overflow-hidden bg-neutral-900 sm:min-h-[320px]">
                   <ImageWithFallback
                     src={study.heroImage}
                     alt={study.title}
                     className="h-full w-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0b0b0d] via-[#0b0b0d]/35 to-transparent" />
-                  <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
+                  <div className="absolute inset-x-0 bottom-0 p-4 sm:p-8">
                     <SectionLabel>Case Study</SectionLabel>
-                    <h3 className="mt-4 max-w-2xl text-3xl text-white sm:text-4xl">{study.title}</h3>
-                    <p className="mt-3 max-w-2xl text-base leading-relaxed text-neutral-200 sm:text-lg">
+                    <h3 className="mt-3 max-w-2xl text-2xl text-white sm:mt-4 sm:text-4xl">{study.title}</h3>
+                    <p className="mt-2 max-w-2xl text-sm leading-relaxed text-neutral-200 sm:mt-3 sm:text-lg">
                       {study.tagline}
                     </p>
                   </div>
                 </div>
 
-                <div className="grid gap-4 bg-white/[0.02] p-6 sm:grid-cols-2 sm:p-8 lg:grid-cols-1">
-                  <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                <div className="grid grid-cols-2 gap-2 bg-white/[0.02] p-3 sm:gap-4 sm:p-8 lg:grid-cols-1">
+                  <div className="rounded-xl border border-white/10 bg-black/20 p-3 sm:rounded-2xl sm:p-5">
                     <p className="text-xs uppercase tracking-[0.2em] text-neutral-500">Company</p>
-                    <p className="mt-3 text-sm leading-relaxed text-neutral-200">{study.context.company}</p>
+                    <p className="mt-2 text-xs leading-relaxed text-neutral-200 sm:mt-3 sm:text-sm">{study.context.company}</p>
                   </div>
-                  <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                  <div className="rounded-xl border border-white/10 bg-black/20 p-3 sm:rounded-2xl sm:p-5">
                     <p className="text-xs uppercase tracking-[0.2em] text-neutral-500">Duration</p>
-                    <p className="mt-3 text-sm leading-relaxed text-neutral-200">{study.context.duration}</p>
+                    <p className="mt-2 text-xs leading-relaxed text-neutral-200 sm:mt-3 sm:text-sm">{study.context.duration}</p>
                   </div>
-                  <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                  <div className="rounded-xl border border-white/10 bg-black/20 p-3 sm:rounded-2xl sm:p-5">
                     <p className="text-xs uppercase tracking-[0.2em] text-neutral-500">Team</p>
-                    <p className="mt-3 text-sm leading-relaxed text-neutral-200">{study.context.team}</p>
+                    <p className="mt-2 text-xs leading-relaxed text-neutral-200 sm:mt-3 sm:text-sm">{study.context.team}</p>
                   </div>
-                  <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                  <div className="rounded-xl border border-white/10 bg-black/20 p-3 sm:rounded-2xl sm:p-5">
                     <p className="text-xs uppercase tracking-[0.2em] text-neutral-500">My Role</p>
-                    <p className="mt-3 text-sm leading-relaxed text-neutral-200">{study.context.myRole}</p>
+                    <p className="mt-2 text-xs leading-relaxed text-neutral-200 sm:mt-3 sm:text-sm">{study.context.myRole}</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="grid gap-10 p-6 sm:p-8 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-14 lg:p-10">
-              <aside className="space-y-4 lg:sticky lg:top-0 lg:self-start">
+            <div className="grid gap-7 p-4 sm:gap-10 sm:p-8 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-14 lg:p-10">
+              <aside className="hidden space-y-4 lg:sticky lg:top-0 lg:block lg:self-start">
                 <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
                   <p className="text-xs uppercase tracking-[0.24em] text-neutral-500">Inside This Case Study</p>
                   <div className="mt-4 space-y-1 text-sm text-neutral-300">
@@ -761,39 +765,49 @@ function CaseStudyWindow({
                 </div>
               </aside>
 
-              <div className="space-y-10">
-                <section id="case-study-problem" className="scroll-mt-8 space-y-4">
+              <div className="space-y-7 sm:space-y-10">
+                <section id="case-study-problem" className="scroll-mt-8 space-y-3 sm:space-y-4">
                   <SectionLabel>The Problem</SectionLabel>
-                  <p className="text-base leading-relaxed text-neutral-200">{study.problem}</p>
+                  <p className="text-sm leading-relaxed text-neutral-200 sm:text-base">{study.problem}</p>
                 </section>
 
-                <section id="case-study-challenge" className="scroll-mt-8 space-y-4">
+                <section id="case-study-challenge" className="scroll-mt-8 space-y-3 sm:space-y-4">
                   <SectionLabel>The Challenge</SectionLabel>
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
-                    <p className="text-base leading-relaxed text-neutral-200">{study.challenge}</p>
+                  <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 sm:rounded-2xl sm:p-6">
+                    <p className="text-sm leading-relaxed text-neutral-200 sm:text-base">{study.challenge}</p>
                   </div>
                 </section>
 
-                <section id="case-study-approach" className="scroll-mt-8 space-y-5">
+                <section id="case-study-approach" className="scroll-mt-8 space-y-4 sm:space-y-5">
                   <SectionLabel>My Approach</SectionLabel>
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {study.approach.map((step, index) => (
                       <div
                         key={index}
-                        className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6"
+                        className="rounded-xl border border-white/10 bg-white/[0.03] p-4 sm:rounded-2xl sm:p-6"
                       >
-                        <div className="flex items-start gap-4">
-                          <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
-                            <step.icon className="h-5 w-5 text-neutral-200" />
+                        <div className="sm:flex sm:items-start sm:gap-4">
+                          <div className="hidden h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5 sm:flex">
+                            <step.icon className="h-4 w-4 text-neutral-200 sm:h-5 sm:w-5" />
                           </div>
                           <div className="min-w-0 flex-1">
-                            <h4 className="text-lg text-white">{step.phase}</h4>
-                            <p className="mt-2 text-sm leading-relaxed text-neutral-200 sm:text-base">
+                            <div className="mb-3 flex items-center gap-3 sm:mb-0 sm:block">
+                              <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 sm:hidden">
+                                <step.icon className="h-4 w-4 text-neutral-200" />
+                              </div>
+                              <h4 className="text-base text-white sm:text-lg">{step.phase}</h4>
+                            </div>
+                            <p className="text-sm leading-relaxed text-neutral-200 sm:mt-2 sm:text-base">
                               {step.description}
                             </p>
-                            <ul className="mt-4 space-y-2">
+                            <ul className="mt-3 space-y-2 sm:mt-4">
                               {step.details.map((detail, detailIndex) => (
-                                <li key={detailIndex} className="flex gap-3 text-sm leading-relaxed text-neutral-200">
+                                <li
+                                  key={detailIndex}
+                                  className={`gap-3 text-sm leading-relaxed text-neutral-200 ${
+                                    detailIndex > 1 ? "hidden sm:flex" : "flex"
+                                  }`}
+                                >
                                   <span className="mt-0.5 text-neutral-500">/</span>
                                   <span>{detail}</span>
                                 </li>
@@ -807,16 +821,18 @@ function CaseStudyWindow({
                 </section>
 
                 {!!study.aiBehaviorDecisions?.length && (
-                  <section id="case-study-ai-decisions" className="scroll-mt-8 space-y-5">
+                  <section id="case-study-ai-decisions" className="scroll-mt-8 space-y-4 sm:space-y-5">
                     <SectionLabel>AI Product Decisions</SectionLabel>
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
+                    <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 sm:rounded-2xl sm:p-6">
                       <ol className="space-y-3">
                         {study.aiBehaviorDecisions.map((decision, index) => (
                           <li
                             key={index}
-                            className="grid gap-3 text-sm leading-relaxed text-neutral-200 sm:grid-cols-[2.5rem_minmax(0,1fr)] sm:text-base"
+                            className={`gap-3 text-sm leading-relaxed text-neutral-200 sm:grid sm:grid-cols-[2.5rem_minmax(0,1fr)] sm:text-base ${
+                              index > 3 ? "hidden sm:grid" : "grid grid-cols-[2rem_minmax(0,1fr)]"
+                            }`}
                           >
-                            <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xs text-neutral-400">
+                            <span className="flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xs text-neutral-400 sm:h-8 sm:w-8">
                               {index + 1}
                             </span>
                             <span>{decision}</span>
@@ -828,11 +844,11 @@ function CaseStudyWindow({
                 )}
 
                 {study.processImages.length > 0 && (
-                  <section className="space-y-5">
+                  <section className="space-y-4 sm:space-y-5">
                     <SectionLabel>Process & Iteration</SectionLabel>
-                    <div className="grid gap-4 md:grid-cols-2">
+                    <div className="grid gap-3 md:grid-cols-2 md:gap-4">
                       {study.processImages.map((img, index) => (
-                        <div key={index} className="rounded-2xl border border-white/10 bg-white/[0.03] p-3">
+                        <div key={index} className="rounded-xl border border-white/10 bg-white/[0.03] p-2 sm:rounded-2xl sm:p-3">
                           <button
                             type="button"
                             onClick={() => setZoomedImage(img.url)}
@@ -845,9 +861,9 @@ function CaseStudyWindow({
                               className="aspect-video w-full origin-top scale-150 object-cover object-top transition-transform duration-300"
                             />
                           </button>
-                          <div className="mt-4 space-y-2">
+                          <div className="mt-3 space-y-1.5 sm:mt-4 sm:space-y-2">
                             <h4 className="text-xs uppercase tracking-[0.18em] text-neutral-400">{img.phase}</h4>
-                            <p className="text-sm leading-relaxed text-neutral-300">{img.caption}</p>
+                            <p className="hidden text-sm leading-relaxed text-neutral-300 sm:block">{img.caption}</p>
                           </div>
                         </div>
                       ))}
@@ -856,13 +872,13 @@ function CaseStudyWindow({
                 )}
 
                 {!!study.launchEvidence?.length && (
-                  <section id="case-study-launch-evidence" className="scroll-mt-8 space-y-5">
+                  <section id="case-study-launch-evidence" className="scroll-mt-8 space-y-4 sm:space-y-5">
                     <SectionLabel>Launch Evidence</SectionLabel>
-                    <div className="grid gap-4 md:grid-cols-3">
+                    <div className="grid gap-3 md:grid-cols-3 md:gap-4">
                       {study.launchEvidence.map((item, index) => (
                         <div
                           key={index}
-                          className="rounded-2xl border border-emerald-400/15 bg-emerald-400/[0.05] p-5"
+                          className="rounded-xl border border-emerald-400/15 bg-emerald-400/[0.05] p-4 sm:rounded-2xl sm:p-5"
                         >
                           <p className="text-sm text-white sm:text-base">{item.signal}</p>
                           <p className="mt-2 text-sm leading-relaxed text-neutral-200">{item.description}</p>
@@ -872,23 +888,23 @@ function CaseStudyWindow({
                   </section>
                 )}
 
-                <section id="case-study-insight" className="scroll-mt-8 space-y-4">
+                <section id="case-study-insight" className="scroll-mt-8 space-y-3 sm:space-y-4">
                   <SectionLabel>Key Insight</SectionLabel>
-                  <div className="rounded-2xl border border-amber-500/15 bg-amber-500/[0.05] p-5 sm:p-6">
-                    <p className="text-base italic leading-relaxed text-neutral-200">"{study.keyInsight}"</p>
+                  <div className="rounded-xl border border-amber-500/15 bg-amber-500/[0.05] p-4 sm:rounded-2xl sm:p-6">
+                    <p className="text-sm italic leading-relaxed text-neutral-200 sm:text-base">"{study.keyInsight}"</p>
                   </div>
                 </section>
 
-                <section id="case-study-solution" className="scroll-mt-8 space-y-5">
+                <section id="case-study-solution" className="scroll-mt-8 space-y-4 sm:space-y-5">
                   <SectionLabel>The Solution</SectionLabel>
-                  <p className="whitespace-pre-line text-base leading-relaxed text-neutral-200">{study.solution}</p>
-                  <div className="grid gap-4 sm:grid-cols-2">
+                  <p className="line-clamp-6 whitespace-pre-line text-sm leading-relaxed text-neutral-200 sm:line-clamp-none sm:text-base">{study.solution}</p>
+                  <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
                     {study.solutionImages.map((img, index) => (
                       <button
                         key={index}
                         type="button"
                         onClick={() => setZoomedImage(img)}
-                        className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] text-left"
+                        className="group overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] text-left sm:rounded-2xl"
                       >
                         <ImageWithFallback
                           src={img}
@@ -900,13 +916,13 @@ function CaseStudyWindow({
                   </div>
                 </section>
 
-                <section id="case-study-outcomes" className="scroll-mt-8 space-y-5">
+                <section id="case-study-outcomes" className="scroll-mt-8 space-y-4 sm:space-y-5">
                   <SectionLabel>Impact & Outcomes</SectionLabel>
-                  <div className="grid gap-4 md:grid-cols-2">
+                  <div className="grid gap-3 md:grid-cols-2 md:gap-4">
                     {study.outcomes.map((outcome, index) => (
                       <div
                         key={index}
-                        className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6"
+                        className="rounded-xl border border-white/10 bg-white/[0.03] p-4 sm:rounded-2xl sm:p-6"
                       >
                         <p className="text-base text-white sm:text-lg">{outcome.metric}</p>
                         <p className="mt-2 text-sm leading-relaxed text-neutral-200">{outcome.description}</p>
@@ -915,12 +931,17 @@ function CaseStudyWindow({
                   </div>
                 </section>
 
-                <section id="case-study-learnings" className="scroll-mt-8 space-y-5">
+                <section id="case-study-learnings" className="scroll-mt-8 space-y-4 sm:space-y-5">
                   <SectionLabel>What I Learned</SectionLabel>
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
+                  <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 sm:rounded-2xl sm:p-6">
                     <ul className="space-y-3">
                       {study.learnings.map((learning, index) => (
-                        <li key={index} className="flex gap-3 text-sm leading-relaxed text-neutral-200 sm:text-base">
+                        <li
+                          key={index}
+                          className={`gap-3 text-sm leading-relaxed text-neutral-200 sm:flex sm:text-base ${
+                            index > 2 ? "hidden" : "flex"
+                          }`}
+                        >
                           <span className="mt-0.5 text-neutral-500">/</span>
                           <span>{learning}</span>
                         </li>
@@ -931,6 +952,15 @@ function CaseStudyWindow({
               </div>
             </div>
           </div>
+
+          <button
+            type="button"
+            onClick={() => onOpenChange(false)}
+            aria-label="Close case study"
+            className="absolute bottom-4 right-4 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-white text-neutral-950 shadow-2xl shadow-black/40 transition-transform active:scale-95 sm:hidden"
+          >
+            <X className="h-5 w-5" />
+          </button>
         </DialogContent>
       </Dialog>
 
@@ -1064,10 +1094,12 @@ export function Work() {
           </div>
 
           <h2 className="mb-6 text-5xl lg:text-7xl">
-            How I{" "}
-            <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent">
-              Think & Work
-            </span>
+            <ScrambleText text="How I" />{" "}
+            <ScrambleText
+              text="Think & Work"
+              delay={0.12}
+              className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent"
+            />
           </h2>
 
           <p className="max-w-2xl text-lg leading-relaxed text-neutral-200 sm:text-xl">
@@ -1103,9 +1135,21 @@ export function Work() {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <div className="mt-8 hidden justify-end gap-3 md:flex">
-            <CarouselPrevious className="static translate-x-0 translate-y-0 border-white/10 bg-white/5 text-white hover:bg-white/10 disabled:opacity-30" />
-            <CarouselNext className="static translate-x-0 translate-y-0 border-white/10 bg-white/5 text-white hover:bg-white/10 disabled:opacity-30" />
+          <div className="mt-6 flex items-center justify-center gap-2">
+            {caseStudies.map((study, index) => (
+              <button
+                key={study.title}
+                type="button"
+                onClick={() => carouselApi?.scrollTo(index)}
+                aria-label={`Show ${study.title} case study`}
+                aria-current={activeCardIndex === index ? "true" : undefined}
+                className={`h-2.5 rounded-full transition-all duration-300 ${
+                  activeCardIndex === index
+                    ? "w-8 bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400"
+                    : "w-2.5 bg-white/20 hover:bg-white/40"
+                }`}
+              />
+            ))}
           </div>
         </Carousel>
       </div>

@@ -20,8 +20,7 @@ export function About() {
             <div className="relative text-center">
               <Quote className="absolute top-0 left-0 w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 text-violet-400/10" />
               <p className="text-lg sm:text-xl lg:text-3xl text-neutral-200 leading-relaxed italic relative z-10 px-8 sm:px-12" style={{ fontStyle: 'italic' }}>
-                After 17 years, I've learned design is about trust, not just usability. I solve for why 
-                people hesitate, not just what they need.
+                Through the years, I've learned that great design is often invisible. It's not about making people notice the product. It's about helping them feel understood, guided, and in control.
               </p>
               <Quote className="absolute bottom-0 right-0 w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 text-violet-400/10" />
             </div>
